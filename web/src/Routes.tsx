@@ -7,11 +7,34 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { Router, Route } from '@redwoodjs/router'
+import { Set as RouteSet, Router, Route } from '@redwoodjs/router'
+
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
+
+import { useAuth } from './auth'
+import ManageLayout from './layouts/ManageLayout/ManageLayout'
 
 const Routes = () => {
   return (
-    <Router>
+    <Router useAuth={useAuth}>
+      <Route path="/" page={HomePage} name="home" />
+
+      <RouteSet wrap={ScaffoldLayout} title="Novels" titleTo="novels" buttonLabel="New Novel" buttonTo="newNovel">
+        <Route path="/novels/new" page={NovelNewNovelPage} name="newNovel" />
+        <Route path="/novels/{novelId}/edit" page={NovelEditNovelPage} name="editNovel" />
+        <Route path="/novels/{novelId}" page={NovelNovelPage} name="novel" />
+        <Route path="/novels" page={NovelNovelsPage} name="novels" />
+      </RouteSet>
+
+      <RouteSet wrap={ManageLayout}>
+        <Route path="/my-bookshelf" page={MyBookshelfPage} name="myBookshelf" />
+        <Route path="/desk" page={DeskPage} name="desk" />
+      </RouteSet>
+
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/signup" page={SignupPage} name="signup" />
+      <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
+      <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
       <Route notfound page={NotFoundPage} />
     </Router>
   )
