@@ -22,6 +22,13 @@ const HomePage = () => {
             <ul className="select-none menu bg-base-200 rounded-box w-full">
               <li>
                 <p>小説管理</p>
+
+                <ul>
+                  <li>
+                    <p>複数小説型（複数話、単話）</p>
+                    <p>セクション分け</p>
+                  </li>
+                </ul>
               </li>
               <li>
                 <p>執筆アシスタント</p>
