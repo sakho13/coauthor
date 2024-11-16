@@ -19,7 +19,7 @@ const SignupPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(routes.home())
+      navigate(routes.myBookshelf())
     }
   }, [isAuthenticated])
 
@@ -29,7 +29,17 @@ const SignupPage = () => {
     usernameRef.current?.focus()
   }, [])
 
-  const onSubmit = async (data: Record<string, string>) => {
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const passwordConfirmRef = useRef<HTMLInputElement>(null)
+
+  const onSubmit = async (
+    data: Record<'username' | 'password' | 'password-confirm', string>
+  ) => {
+    if (data.password !== data['password-confirm']) {
+      toast.error('パスワードが一致しません')
+      return
+    }
+
     const response = await signUp({
       username: data.username,
       password: data.password,
@@ -38,7 +48,13 @@ const SignupPage = () => {
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
-      toast.error(response.error)
+      if (typeof response.error === 'string') {
+        if (response.error.includes('already in use')) {
+          toast.error(`既に登録されているメールアドレスです ${data.username}`)
+        }
+        return
+      }
+      toast.error('現在新規登録できません 問い合わせください🙏')
     } else {
       // user is signed in automatically
       toast.success('Welcome!')
@@ -54,7 +70,7 @@ const SignupPage = () => {
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">Signup</h2>
+              <h2 className="rw-heading rw-heading-secondary">新規登録</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -65,17 +81,22 @@ const SignupPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    メールアドレス
                   </Label>
                   <TextField
                     name="username"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={usernameRef}
+                    placeholder="user0001@coauthor.com"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Username is required',
+                        message: 'メールアドレスを入力してください',
+                      },
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                        message: 'メールアドレスの形式で入力してください',
                       },
                     }}
                   />
@@ -86,35 +107,90 @@ const SignupPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    パスワード
                   </Label>
                   <PasswordField
                     name="password"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
+                    ref={passwordRef}
                     autoComplete="current-password"
+                    placeholder="********"
                     validation={{
                       required: {
                         value: true,
-                        message: 'Password is required',
+                        message: 'パスワードを入力してください',
+                      },
+                      minLength: {
+                        value: 8,
+                        message: '8文字以上で入力してください',
+                      },
+                      pattern: {
+                        value: /^[A-Za-z0-9@?;:]+$/,
+                        message: '英数字記号（@?;:）で入力してください',
+                      },
+                      validate: (value) => {
+                        if (value !== passwordConfirmRef.current?.value) {
+                          return 'パスワードが一致しません'
+                        }
                       },
                     }}
                   />
                   <FieldError name="password" className="rw-field-error" />
 
+                  <Label
+                    name="password-confirm"
+                    className="rw-label"
+                    errorClassName="rw-label rw-label-error"
+                  >
+                    パスワード(確認)
+                  </Label>
+                  <PasswordField
+                    name="password-confirm"
+                    className="rw-input"
+                    errorClassName="rw-input rw-input-error"
+                    ref={passwordConfirmRef}
+                    autoComplete="current-password"
+                    placeholder="********"
+                    validation={{
+                      required: {
+                        value: true,
+                        message: 'パスワード(確認)を入力してください',
+                      },
+                      minLength: {
+                        value: 8,
+                        message: '8文字以上で入力してください',
+                      },
+                      pattern: {
+                        value: /^[A-Za-z0-9@?;:]+$/,
+                        message: '英数字記号（@?;:）で入力してください',
+                      },
+                      validate: (value) => {
+                        if (value !== passwordRef.current?.value) {
+                          return 'パスワードが一致しません'
+                        }
+                      },
+                    }}
+                  />
+                  <FieldError
+                    name="password-confirm"
+                    className="rw-field-error"
+                  />
+
                   <div className="rw-button-group">
                     <Submit className="rw-button rw-button-blue">
-                      Sign Up
+                      新規登録
                     </Submit>
                   </div>
                 </Form>
               </div>
             </div>
           </div>
+
           <div className="rw-login-link">
-            <span>Already have an account?</span>{' '}
+            <span>既にユーザー登録されていますか?</span>{' '}
             <Link to={routes.login()} className="rw-link">
-              Log in!
+              ログイン!
             </Link>
           </div>
         </div>
