@@ -19,7 +19,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(routes.home())
+      navigate(routes.myBookshelf())
     }
   }, [isAuthenticated])
 
@@ -33,11 +33,18 @@ const LoginPage = () => {
       username: data.username,
       password: data.password,
     })
+    console.log('response:', response)
 
     if (response.message) {
       toast(response.message)
     } else if (response.error) {
-      toast.error(response.error)
+      if (typeof response.error === 'string') {
+        if (response.error.includes('not found')) {
+          toast.error(`ユーザ登録を行ってください ${data.username}`)
+        }
+        return
+      }
+      toast.error('現在ログインできません 問い合わせください🙏')
     } else {
       toast.success('Welcome back!')
     }
@@ -49,10 +56,11 @@ const LoginPage = () => {
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
+
         <div className="rw-scaffold rw-login-container">
           <div className="rw-segment">
             <header className="rw-segment-header">
-              <h2 className="rw-heading rw-heading-secondary">Login</h2>
+              <h2 className="rw-heading rw-heading-secondary">ログイン</h2>
             </header>
 
             <div className="rw-segment-main">
@@ -63,21 +71,27 @@ const LoginPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Username
+                    メールアドレス
                   </Label>
-                  <TextField
-                    name="username"
-                    className="rw-input"
-                    errorClassName="rw-input rw-input-error"
-                    ref={usernameRef}
-                    validation={{
-                      required: {
-                        value: true,
-                        message: 'Username is required',
-                      },
-                    }}
-                  />
-
+                  <div className="flex">
+                    <TextField
+                      name="username"
+                      className="rw-input"
+                      errorClassName="rw-input rw-input-error"
+                      ref={usernameRef}
+                      placeholder="user0001@coauthor.com"
+                      validation={{
+                        required: {
+                          value: true,
+                          message: 'メールアドレスを入力してください',
+                        },
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                          message: 'メールアドレスの形式で入力してください',
+                        },
+                      }}
+                    />
+                  </div>
                   <FieldError name="username" className="rw-field-error" />
 
                   <Label
@@ -85,20 +99,32 @@ const LoginPage = () => {
                     className="rw-label"
                     errorClassName="rw-label rw-label-error"
                   >
-                    Password
+                    パスワード
                   </Label>
-                  <PasswordField
-                    name="password"
-                    className="rw-input"
-                    errorClassName="rw-input rw-input-error"
-                    autoComplete="current-password"
-                    validation={{
-                      required: {
-                        value: true,
-                        message: 'Password is required',
-                      },
-                    }}
-                  />
+                  <div className="flex">
+                    <PasswordField
+                      name="password"
+                      className="rw-input"
+                      errorClassName="rw-input rw-input-error"
+                      autoComplete="current-password"
+                      placeholder="********"
+                      validation={{
+                        required: {
+                          value: true,
+                          message: 'パスワードを入力してください',
+                        },
+                        minLength: {
+                          value: 8,
+                          message: '8文字以上で入力してください',
+                        },
+                        pattern: {
+                          value: /^[A-Za-z0-9@?;:]+$/,
+                          message: '英数字記号（@?;:）で入力してください',
+                        },
+                      }}
+                    />
+                  </div>
+                  <FieldError name="password" className="rw-field-error" />
 
                   <div className="rw-forgot-link">
                     <Link
@@ -109,17 +135,17 @@ const LoginPage = () => {
                     </Link>
                   </div>
 
-                  <FieldError name="password" className="rw-field-error" />
-
                   <div className="rw-button-group">
-                    <Submit className="rw-button rw-button-blue">Login</Submit>
+                    {/* rw-button rw-button-blue */}
+                    <Submit className="btn btn-secondary">ログイン</Submit>
                   </div>
                 </Form>
               </div>
             </div>
           </div>
+
           <div className="rw-login-link">
-            <span>Don&apos;t have an account?</span>{' '}
+            <span>ユーザー登録へ</span>{' '}
             <Link to={routes.signup()} className="rw-link">
               Sign up!
             </Link>
