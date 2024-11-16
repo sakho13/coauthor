@@ -39,7 +39,7 @@
 
 * 小説マスタ novel
   * 小説ID novel_id
-  * 小説名 novel_name
+  * 小説名 title
   * 小説区分 novel_type (小説/短編/エッセイ/詩/その他)
 * ストーリー story
   * 小説ID novel_id
