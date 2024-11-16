@@ -7,7 +7,7 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { Set as RouteSet, Router, Route } from '@redwoodjs/router'
+import { Set as RouteSet, Router, Route, PrivateSet } from '@redwoodjs/router'
 
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 
@@ -26,10 +26,10 @@ const Routes = () => {
         <Route path="/novels" page={NovelNovelsPage} name="novels" />
       </RouteSet>
 
-      <RouteSet wrap={ManageLayout}>
+      <PrivateSet unauthenticated="home" wrap={ManageLayout}>
         <Route path="/my-bookshelf" page={MyBookshelfPage} name="myBookshelf" />
         <Route path="/desk" page={DeskPage} name="desk" />
-      </RouteSet>
+      </PrivateSet>
 
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />
