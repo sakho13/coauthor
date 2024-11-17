@@ -27,11 +27,43 @@ model User {
 }
 
 model Novel {
-  novelId   String   @id @default(uuid()) @map("novel_id")
-  title     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  authorId  String   @map("author_id")
+  novelId     String @id @default(uuid()) @map("novel_id")
+  authorId    String @map("author_id")
+  title       String
+  description String
+  share       Int    @default(0) // 0: private, 1: public
+  type        Int    @default(0) // 0: 複数話, 1: 一話完結
+  status      Int    @default(0) // 0: 連載中, 1: 完結
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   author User @relation(fields: [authorId], references: [id])
 }
+
+// model Story {
+//   novelId String @map("novel_id")
+//   storyId String @default(uuid()) @map("story_id")
+//   order   Int    @default(0)
+//   body    String
+
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+
+//   novel Novel @relation(fields: [novelId], references: [novelId])
+
+//   @@id([novelId, storyId])
+// }
+
+// model Word {
+//   novelId String @map("novel_id")
+//   wordId  String @default(uuid()) @map("word_id")
+
+//   word               String
+//   descriptionPrivate String   @map("description_private")
+//   descriptionPublic  String   @map("description_public")
+//   createdAt          DateTime @default(now()) @map("created_at")
+//   updatedAt          DateTime @updatedAt @map("updated_at")
+
+//   @@id([novelId, wordId])
+// }
