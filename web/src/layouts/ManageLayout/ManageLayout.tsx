@@ -1,5 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from 'src/auth'
+import AccountCircleSvg from './account-circle.svg'
 
 type ManageLayoutProps = {
   children?: React.ReactNode
@@ -17,14 +18,29 @@ const ManageLayout = ({ children }: ManageLayoutProps) => {
           <Link to={routes.myBookshelf()}>CoAuthor</Link>
         </h1>
 
-        <button
-          type="button"
-          onClick={() => {
-            logOut()
-          }}
-        >
-          A
-        </button>
+        <div tabIndex={0} className="dropdown dropdown-end">
+          <div className="btn btn-ghost btn-circle avatar">
+            <img src={AccountCircleSvg} alt="Logo" />
+          </div>
+
+          <ul
+            tabIndex={0}
+            className={[
+              'menu menu-sm dropdown-content',
+              'shadow-sm',
+              'bg-base-100 rounded-box z-[1] mt-3 w-52 p-2',
+            ].join(' ')}
+          >
+            <li>
+              <p>プロフィール</p>
+            </li>
+            <li>
+              <button type="button" onClick={() => logOut()}>
+                ログアウト
+              </button>
+            </li>
+          </ul>
+        </div>
       </header>
 
       <main>{children}</main>
