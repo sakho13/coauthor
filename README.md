@@ -1,5 +1,11 @@
 # README
 
+## features
+
+[DOCUMENT](./DOCUMENT.md)
+
+## installation
+
 Welcome to [RedwoodJS](https://redwoodjs.com)!
 
 > **Prerequisites**
