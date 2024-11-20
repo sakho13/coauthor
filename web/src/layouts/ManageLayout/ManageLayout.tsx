@@ -19,8 +19,10 @@ const ManageLayout = ({ children }: ManageLayoutProps) => {
         </h1>
 
         <div tabIndex={0} className="dropdown dropdown-end">
-          <div className="btn btn-ghost btn-circle avatar">
-            <img src={AccountCircleSvg} alt="Logo" />
+          <div className="btn btn-ghost btn-circle avatar h-fit">
+            <div className="w-8">
+              <img src={AccountCircleSvg} alt="Logo" />
+            </div>
           </div>
 
           <ul
