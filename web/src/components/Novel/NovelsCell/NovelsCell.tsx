@@ -1,6 +1,5 @@
 import type { FindNovels, FindNovelsVariables } from 'types/graphql'
 
-import { Link, routes } from '@redwoodjs/router'
 import type {
   CellSuccessProps,
   CellFailureProps,
@@ -13,7 +12,12 @@ export const QUERY: TypedDocumentNode<FindNovels, FindNovelsVariables> = gql`
   query FindNovels {
     novels {
       novelId
+      authorId
       title
+      description
+      share
+      type
+      status
       createdAt
       updatedAt
     }
@@ -23,14 +27,7 @@ export const QUERY: TypedDocumentNode<FindNovels, FindNovelsVariables> = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => {
-  return (
-    <div className="rw-text-center">
-      No novels yet.{' '}
-      <Link to={routes.newNovel()} className="rw-link">
-        Create one?
-      </Link>
-    </div>
-  )
+  return <div className="rw-text-center">執筆中の小説はありません。</div>
 }
 
 export const Failure = ({ error }: CellFailureProps<FindNovels>) => (

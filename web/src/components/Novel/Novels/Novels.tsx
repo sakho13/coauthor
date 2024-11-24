@@ -50,7 +50,12 @@ const NovelsList = ({ novels }: FindNovels) => {
         <thead>
           <tr>
             <th>Novel id</th>
+            <th>Author id</th>
             <th>Title</th>
+            <th>Description</th>
+            <th>Share</th>
+            <th>Type</th>
+            <th>Status</th>
             <th>Created at</th>
             <th>Updated at</th>
             <th>&nbsp;</th>
@@ -60,7 +65,12 @@ const NovelsList = ({ novels }: FindNovels) => {
           {novels.map((novel) => (
             <tr key={novel.novelId}>
               <td>{truncate(novel.novelId)}</td>
+              <td>{truncate(novel.authorId)}</td>
               <td>{truncate(novel.title)}</td>
+              <td>{truncate(novel.description)}</td>
+              <td>{truncate(novel.share)}</td>
+              <td>{truncate(novel.type)}</td>
+              <td>{truncate(novel.status)}</td>
               <td>{timeTag(novel.createdAt)}</td>
               <td>{timeTag(novel.updatedAt)}</td>
               <td>
