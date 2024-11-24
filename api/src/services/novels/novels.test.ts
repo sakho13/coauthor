@@ -22,13 +22,20 @@ describe('novels', () => {
     expect(result).toEqual(scenario.novel.one)
   })
 
-  scenario('creates a novel', async () => {
+  scenario('creates a novel', async (scenario: StandardScenario) => {
     const result = await createNovel({
-      input: { title: 'String', updatedAt: '2024-11-14T11:28:50.419Z' },
+      input: {
+        authorId: scenario.novel.two.authorId,
+        title: 'String',
+        description: 'String',
+        updatedAt: '2024-11-22T00:15:59.822Z',
+      },
     })
 
+    expect(result.authorId).toEqual(scenario.novel.two.authorId)
     expect(result.title).toEqual('String')
-    expect(result.updatedAt).toEqual(new Date('2024-11-14T11:28:50.419Z'))
+    expect(result.description).toEqual('String')
+    expect(result.updatedAt).toEqual(new Date('2024-11-22T00:15:59.822Z'))
   })
 
   scenario('updates a novel', async (scenario: StandardScenario) => {
