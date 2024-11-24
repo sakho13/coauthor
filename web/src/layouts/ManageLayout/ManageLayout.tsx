@@ -15,7 +15,7 @@ const ManageLayout = ({ children }: ManageLayoutProps) => {
         className="border-b-2 px-16 py-4 shadow-sm flex justify-between"
       >
         <h1 className="select-none font-bold text-xl">
-          <Link to={routes.myBookshelf()}>CoAuthor</Link>
+          <Link to={routes.desk()}>CoAuthor</Link>
         </h1>
 
         <div tabIndex={0} className="dropdown dropdown-end">
@@ -45,7 +45,7 @@ const ManageLayout = ({ children }: ManageLayoutProps) => {
         </div>
       </header>
 
-      <main>{children}</main>
+      <main className="px-32 pt-8">{children}</main>
     </>
   )
 }
