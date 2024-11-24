@@ -1,5 +1,6 @@
-// import { Link, routes } from '@redwoodjs/router'
+import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
+import NovelsCell from 'src/components/Novel/NovelsCell'
 
 /**
  * 小説の執筆ページ
@@ -8,16 +9,19 @@ import { Metadata } from '@redwoodjs/web'
 const DeskPage = () => {
   return (
     <>
-      <Metadata title="Desk" description="Desk page" />
+      <Metadata title="執筆中小説一覧" description="執筆中小説一覧ページ" />
 
-      <h1>DeskPage</h1>
-      <p>
-        Find me in <code>./web/src/pages/DeskPage/DeskPage.tsx</code>
-      </p>
-      {/*
-          My default route is named `desk`, link to me with:
-          `<Link to={routes.desk()}>Desk</Link>`
-      */}
+      <div className="border rounded-lg py-4 px-8">
+        <div className="flex justify-between">
+          <h1>執筆中の小説</h1>
+
+          <Link className="btn" to={routes.newNovel()}>
+            新規小説を作成する
+          </Link>
+        </div>
+
+        <NovelsCell />
+      </div>
     </>
   )
 }
