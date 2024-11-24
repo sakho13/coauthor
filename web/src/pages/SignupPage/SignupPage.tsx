@@ -19,7 +19,7 @@ const SignupPage = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(routes.myBookshelf())
+      navigate(routes.desk())
     }
   }, [isAuthenticated])
 

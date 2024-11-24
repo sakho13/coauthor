@@ -19,16 +19,15 @@ const Routes = () => {
     <Router useAuth={useAuth}>
       <Route path="/" page={HomePage} name="home" />
 
-      <RouteSet wrap={ScaffoldLayout} title="Novels" titleTo="novels" buttonLabel="New Novel" buttonTo="newNovel">
-        <Route path="/novels/new" page={NovelNewNovelPage} name="newNovel" />
+      {/* <RouteSet wrap={ScaffoldLayout} title="Novels" titleTo="novels" buttonLabel="New Novel" buttonTo="newNovel">
         <Route path="/novels/{novelId}/edit" page={NovelEditNovelPage} name="editNovel" />
         <Route path="/novels/{novelId}" page={NovelNovelPage} name="novel" />
         <Route path="/novels" page={NovelNovelsPage} name="novels" />
-      </RouteSet>
+      </RouteSet> */}
 
       <PrivateSet unauthenticated="home" wrap={ManageLayout}>
-        <Route path="/my-bookshelf" page={MyBookshelfPage} name="myBookshelf" />
         <Route path="/desk" page={DeskPage} name="desk" />
+        <Route path="/desk/novels/new" page={NovelNewNovelPage} name="newNovel" />
       </PrivateSet>
 
       <Route path="/login" page={LoginPage} name="login" />
