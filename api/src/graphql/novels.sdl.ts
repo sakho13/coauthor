@@ -1,14 +1,15 @@
 export const schema = gql`
   type Novel {
     novelId: String!
+    authorId: String!
     title: String!
     description: String!
-    share: BigInt
-    type: BigInt
-    status: BigInt
+    share: Int!
+    type: Int!
+    status: Int!
     createdAt: DateTime!
     updatedAt: DateTime!
-    authorId: String!
+    author: User!
   }
 
   type Query {
@@ -17,19 +18,21 @@ export const schema = gql`
   }
 
   input CreateNovelInput {
+    authorId: String!
     title: String!
     description: String!
-    share: BigInt
-    type: BigInt
-    status: BigInt
+    share: Int!
+    type: Int!
+    status: Int!
   }
 
   input UpdateNovelInput {
+    authorId: String
     title: String
     description: String
-    share: BigInt
-    type: BigInt
-    status: BigInt
+    share: Int
+    type: Int
+    status: Int
   }
 
   type Mutation {
