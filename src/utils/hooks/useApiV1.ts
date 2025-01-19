@@ -28,9 +28,41 @@ export function useApiV1() {
     return _parseResponse<ApiV1["Novel"]["Post"]["Out"]>(result)
   }
 
+  /**
+   * DELETE /api/v1/novel
+   */
+  async function deleteNovel(
+    accessToken: string,
+    input: ApiV1["Novel"]["Delete"]["In"],
+  ) {
+    const result = await fetch("/api/v1/novel", {
+      method: "DELETE",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["Novel"]["Delete"]["Out"]>(result)
+  }
+
+  /**
+   * POST /api/v1/novel/chapter
+   */
+  async function postChapter(
+    accessToken: string,
+    input: ApiV1["NovelChapter"]["Post"]["In"],
+  ) {
+    const result = await fetch("/api/v1/novel/chapter", {
+      method: "POST",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["NovelChapter"]["Post"]["Out"]>(result)
+  }
+
   return {
     postUser,
     postNovel,
+    deleteNovel,
+    postChapter,
   }
 }
 
