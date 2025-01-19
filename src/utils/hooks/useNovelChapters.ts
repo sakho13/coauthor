@@ -11,7 +11,7 @@ export const apiV1Fetcher = (...args: Parameters<typeof fetch>) =>
 export function useGetNovelChapters(novelId: string) {
   const { accessToken } = useAuthStore()
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     ["/api/v1/novel/chapters", accessToken],
     async ([url, accessToken]) =>
       accessToken && novelId
@@ -23,9 +23,12 @@ export function useGetNovelChapters(novelId: string) {
         : null,
   )
 
+  const refresh = () => mutate()
+
   return {
     dataGetNovelChapters: data,
     errorGetNovelChapters: error,
     isLoadingGetNovelChapters: isLoading,
+    refreshGetNovelChapters: refresh,
   }
 }
