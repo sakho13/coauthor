@@ -1,0 +1,8 @@
+# Class Structure
+
+[![](https://mermaid.ink/img/pako:eNp1jjEOwjAMRa8SeQKpHVgzMHVmoLBAGEzithFtUqUOqKp6dwKoMOHF_9lPlifQ3hBIqFr_0A0GFodCOZGqpHC3mkSei43cpbYVe-r9YNmH8aP8-L0ukPGKA51XS1pflPt77ci2tTxCBh2FDq1Jb0wvWwE31JECmaLBcFOg3Jw8jOzL0WmQHCJlEHysG5AVtkOi2BtkKizWAbvvtEd38n7h-QlFp063?type=png)](https://mermaid.live/edit#pako:eNp1jjEOwjAMRa8SeQKpHVgzMHVmoLBAGEzithFtUqUOqKp6dwKoMOHF_9lPlifQ3hBIqFr_0A0GFodCOZGqpHC3mkSei43cpbYVe-r9YNmH8aP8-L0ukPGKA51XS1pflPt77ci2tTxCBh2FDq1Jb0wvWwE31JECmaLBcFOg3Jw8jOzL0WmQHCJlEHysG5AVtkOi2BtkKizWAbvvtEd38n7h-QlFp063)
+
+## Api ClAss
+
+- `CoAuthorApi`
+- `CoAuthorError`

@@ -1,0 +1,17 @@
+FROM node:20.11.0
+
+ENV NODE_ENV=development
+
+RUN apt-get update -y && apt-get install -y openssl
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+COPY prisma ./prisma
+
+RUN npm i
+
+EXPOSE 5433
+
+CMD ["tail", "-f", "/dev/null"]
+# CMD [ "npm", "run", "prisma:deploy" ]

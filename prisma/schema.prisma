@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id @default(cuid(2))
+  email String @unique
+  name  String
+
+  firebaseUid String @unique @map("firebase_uid")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  novels Novel[] // ユーザーが執筆した小説
+}
+
+model Novel {
+  id      String @id @default(cuid(2))
+  title   String // 最大100文字
+  summary String // 最大500文字
+  type    Int // 0 = 連載, 1 = 短編
+  status  Int // 0 = 連載中, 1 = 完結済み
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  authorId String    @map("author_id")
+  author   User      @relation(fields: [authorId], references: [id])
+  chapters Chapter[]
+  // tags        Tag[]     @relation("NovelTags")
+}
+
+model Chapter {
+  novelId   String   @map("novel_id")
+  id        Int      @default(autoincrement())
+  title     String
+  content   String // 章の本文
+  order     Int      @default(autoincrement()) // 章の順番
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  novel Novel @relation(fields: [novelId], references: [id])
+
+  @@id([novelId, id])
+}
+
+// model Tag {
+//   id       Int       @id @default(autoincrement())
+//   name     String    @unique
+//   novels   Novel[]   @relation("NovelTags")
+// }
+
+// model Comment {
+//   id        Int       @id @default(autoincrement())
+//   content   String
+//   novelId   Int?
+//   chapterId Int?
+//   novel     Novel?    @relation(fields: [novelId], references: [id])
+//   chapter   Chapter?  @relation(fields: [chapterId], references: [id])
+//   userId    Int
+//   user      User      @relation(fields: [userId], references: [id])
+//   createdAt DateTime  @default(now())
+// }
