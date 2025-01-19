@@ -25,6 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
+import { HeaderParagraph } from "../atoms/HeaderParagraph"
 
 type Props = {
   novelId: string
@@ -60,7 +61,7 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
   return (
     <div id='coauthor-novel-chapter-list' className=''>
       <div id={`novel-title-${dataGetNovelChapters.data.novel.id}`}>
-        <div className='border-b px-2 pb-1 mb-4 flex justify-between items-center'>
+        <HeaderParagraph>
           <h2 className='text-lg'>{dataGetNovelChapters.data.novel.title}</h2>
 
           <Dialog>
@@ -75,7 +76,7 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
               <div>ここに新規チャプターのフォームを実装</div>
             </DialogContent>
           </Dialog>
-        </div>
+        </HeaderParagraph>
 
         <div className='mx-4'>
           <SubParagraph>
