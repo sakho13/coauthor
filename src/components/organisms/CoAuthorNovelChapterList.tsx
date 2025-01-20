@@ -21,19 +21,35 @@ import { useRouter } from "next/navigation"
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
 import { HeaderParagraph } from "../atoms/HeaderParagraph"
+import { Label } from "../ui/label"
+import { Input } from "../ui/input"
+import { Plus } from "lucide-react"
+import { useState } from "react"
+import { useApiV1 } from "@/utils/hooks/useApiV1"
+import { toast } from "sonner"
+import { useAuthStore } from "@/utils/stores/useAuthStore"
 
 type Props = {
   novelId: string
 }
 
 export function CoAuthorNovelChapterList({ novelId }: Props) {
-  const { dataGetNovelChapters, isLoadingGetNovelChapters } =
-    useGetNovelChapters(novelId)
+  const {
+    dataGetNovelChapters,
+    isLoadingGetNovelChapters,
+    newChapterTitle,
+    isDialogOpen,
+    onChangeNewChapterTitle,
+    createNewChapter,
+    toggleDialog,
+  } = useCoAuthorNovelChapterList(novelId)
+
   const router = useRouter()
 
   const table = useReactTable({
@@ -64,16 +80,33 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
         <HeaderParagraph>
           <h2 className='text-lg'>{dataGetNovelChapters.data.novel.title}</h2>
 
-          <Dialog>
+          <Dialog
+            open={isDialogOpen}
+            onOpenChange={(st) => toggleDialog(st ? "open" : "close")}
+          >
             <DialogTrigger asChild>
-              <Button>新規</Button>
+              <Button>
+                <Plus />
+                新規
+              </Button>
             </DialogTrigger>
 
             <DialogContent className='sm:max-w-[425px]'>
               <DialogHeader>
-                <DialogTitle>新規チャプター</DialogTitle>
+                <DialogTitle>新規コンテンツを追加</DialogTitle>
               </DialogHeader>
-              <div>ここに新規チャプターのフォームを実装</div>
+              <div id='novel-chapter-form' className='grid gap-2'>
+                <div>
+                  <Label>タイトル</Label>
+                  <Input
+                    value={newChapterTitle}
+                    onChange={(e) => onChangeNewChapterTitle(e.target.value)}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button onClick={createNewChapter}>追加</Button>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </HeaderParagraph>
@@ -117,7 +150,7 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
                   key={`novel-row-${row.id}`}
                   className='cursor-pointer'
                   onClick={() => {
-                    router.push(`/novel/${novelId}/${row.original.id}`)
+                    router.push(`/novel/${novelId}/c/${row.original.id}`)
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -142,4 +175,58 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
       </div>
     </div>
   )
+}
+
+function useCoAuthorNovelChapterList(novelId: string) {
+  const {
+    dataGetNovelChapters,
+    isLoadingGetNovelChapters,
+    refreshGetNovelChapters,
+  } = useGetNovelChapters(novelId)
+
+  const { accessToken } = useAuthStore()
+  const [newChapterTitle, setNewChapterTitle] = useState("")
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const { postChapter } = useApiV1()
+
+  const onChangeNewChapterTitle = (value: string) => {
+    setNewChapterTitle(value.trim())
+  }
+
+  const createNewChapter = async () => {
+    if (!accessToken) return
+
+    if (newChapterTitle.length === 0) {
+      toast.warning("タイトルが入力されていません")
+      return
+    }
+
+    try {
+      await postChapter(accessToken, {
+        novelId,
+        title: newChapterTitle,
+      })
+      toast.success("新しい章を追加しました")
+      refreshGetNovelChapters()
+      setNewChapterTitle("")
+      _toggleDialog("close")
+    } catch {
+      toast.error("新規コンテンツの追加に失敗しました")
+    }
+  }
+
+  const _toggleDialog = (state: "open" | "close") => {
+    setIsDialogOpen(state === "open")
+  }
+
+  return {
+    dataGetNovelChapters,
+    isLoadingGetNovelChapters,
+    newChapterTitle,
+    isDialogOpen,
+    onChangeNewChapterTitle,
+    createNewChapter,
+    toggleDialog: _toggleDialog,
+  }
 }
