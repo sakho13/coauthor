@@ -10,6 +10,11 @@ export type CoAuthor_Novel = {
   type: (typeof Novel_Type)[keyof typeof Novel_Type]
 }
 
+export type CoAuthor_Novel_AppendedDate = CoAuthor_Novel & {
+  updatedAt: string
+  createdAt: string
+}
+
 export const Novel_Type = {
   0: "SERIAL",
   1: "SINGLE",

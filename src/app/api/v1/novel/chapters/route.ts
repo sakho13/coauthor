@@ -68,8 +68,8 @@ export async function GET(req: NextRequest) {
           title: novel.title,
           summary: novel.summary,
           type: novel.type === 0 ? Novel_Type[0] : Novel_Type[1],
-          createdAt: novel.createdAt,
-          updatedAt: novel.updatedAt,
+          createdAt: novel.createdAt.toISOString(),
+          updatedAt: novel.updatedAt.toISOString(),
         },
         chapters: chapters.map((chapter) => ({
           id: chapter.id,

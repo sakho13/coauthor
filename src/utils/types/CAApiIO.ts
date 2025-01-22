@@ -1,4 +1,8 @@
-import { CoAuthor_Novel, CoAuthor_NovelChapter } from "./CABaseTypes"
+import {
+  CoAuthor_Novel,
+  CoAuthor_Novel_AppendedDate,
+  CoAuthor_NovelChapter,
+} from "./CABaseTypes"
 
 export type ApiV1BaseOut<T> =
   | {
@@ -91,10 +95,7 @@ export type ApiV1 = {
   Novels: {
     Get: {
       Out: {
-        novels: (CoAuthor_Novel & {
-          updatedAt: Date
-          createdAt: Date
-        })[]
+        novels: CoAuthor_Novel_AppendedDate[]
       }
     }
   }
@@ -115,6 +116,14 @@ export type ApiV1 = {
   }
 
   NovelChapterContent: {
+    Get: {
+      Out: {
+        novelId: string
+        chapterId: number
+        content: string
+      }
+    }
+
     /**
      * Contentのみを更新する
      */
@@ -135,10 +144,7 @@ export type ApiV1 = {
   NovelChapters: {
     Get: {
       Out: {
-        novel: CoAuthor_Novel & {
-          updatedAt: Date
-          createdAt: Date
-        }
+        novel: CoAuthor_Novel_AppendedDate
         chapters: Omit<CoAuthor_NovelChapter, "content">[]
       }
     }

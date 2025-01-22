@@ -290,6 +290,16 @@ paths:
 
 components:
   schemas:
+    CreatedAt:
+      type: string
+      format: date-time
+      description: Timezone = UTC (ISO8601)
+      example: "2021-01-01T00:00:00.123Z"
+    UpdatedAt:
+      type: string
+      format: date-time
+      description: Timezone = UTC (ISO8601)
+      example: "2021-01-01T00:00:00.987Z"
     ApiV1ErrorOut:
       type: object
       properties:
@@ -339,13 +349,9 @@ components:
             - SINGLE
           description: "SERIAL: 連載, SINGLE: 短編"
         updatedAt:
-          type: string
-          format: date-time
-          pattern: "YYYY-MM-DDTHH:mm:ssZ"
+          $ref: "#/components/schemas/UpdatedAt"
         createdAt:
-          type: string
-          format: date-time
-          pattern: "YYYY-MM-DDTHH:mm:ssZ"
+          $ref: "#/components/schemas/CreatedAt"
 
   parameters:
     AuthorizationHeader:
