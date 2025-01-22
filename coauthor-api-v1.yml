@@ -183,6 +183,7 @@ paths:
                         type: string
                       content:
                         type: string
+                        maxLength: 70000
     post:
       summary: 小説章の内容登録
       parameters:
@@ -200,6 +201,7 @@ paths:
                   type: string
                 content:
                   type: string
+                  maxLength: 70000
       responses:
         "200":
           description: OK
