@@ -1,12 +1,6 @@
 import useSWR from "swr"
 import { useAuthStore } from "../stores/useAuthStore"
-import { ApiV1BaseOut, ApiV1 } from "../types/CAApiIO"
-
-export const apiV1Fetcher = (...args: Parameters<typeof fetch>) =>
-  fetch(...args).then((res) => {
-    if (!res.ok) return res.json()
-    return res.json()
-  }) as Promise<ApiV1BaseOut<ApiV1["NovelChapters"]["Get"]["Out"]>>
+import { apiV1GetFetcher } from "../functions/apiV1Fetchers"
 
 export function useGetNovelChapters(novelId: string) {
   const { accessToken } = useAuthStore()
@@ -15,7 +9,7 @@ export function useGetNovelChapters(novelId: string) {
     ["/api/v1/novel/chapters", accessToken],
     async ([url, accessToken]) =>
       accessToken && novelId
-        ? apiV1Fetcher(`${url}?novel_id=${novelId}`, {
+        ? apiV1GetFetcher("NovelChapters", `${url}?novel_id=${novelId}`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
