@@ -1,11 +1,38 @@
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import timezone from "dayjs/plugin/timezone"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
 export class DateUtility {
-  public static convertToLocalDateTime(isoDateString: string) {
-    // ISO 8601形式の日時をDateオブジェクトに変換
-    const utcDate = new Date(isoDateString)
+  /**
+   * ISO8601形式の日付文字列を YYYY年MM月DD日 に変換する
+   * @param isoDateString ISO8601形式の日付文字列
+   * @returns
+   */
+  public static convertJstKanjiYYYYMMDD(isoDateString: string) {
+    const date = dayjs(isoDateString).tz("Asia/Tokyo")
+    return date.format("YYYY年MM月DD日")
+  }
 
-    // ローカルの日時を取得
-    const localDate = utcDate.toLocaleString()
+  /**
+   * ISO8601形式の日付文字列を HH:mm に変換する
+   * @param isoDateString ISO8601形式の日付文字列
+   * @returns
+   */
+  public static convertJstHHMM(isoDateString: string) {
+    const date = dayjs(isoDateString).tz("Asia/Tokyo")
+    return date.format("HH:mm")
+  }
 
-    return localDate
+  /**
+   * ISO8601形式の日付文字列を YYYY年MM月DD日 HH:mm に変換する
+   * @param isoDateString ISO8601形式の日付文字列
+   * @returns
+   */
+  public static convertJstYYYYMMDDHHMM(isoDateString: string) {
+    const date = dayjs(isoDateString).tz("Asia/Tokyo")
+    return date.format("YYYY年MM月DD日 HH:mm")
   }
 }

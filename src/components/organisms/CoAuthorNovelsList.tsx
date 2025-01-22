@@ -41,13 +41,13 @@ export function CoAuthorNovelsList() {
         accessorKey: "updatedAt",
         header: "更新日",
         cell: ({ row }) =>
-          DateUtility.convertToLocalDateTime(row.getValue("updatedAt")),
+          DateUtility.convertJstYYYYMMDDHHMM(row.getValue("updatedAt")),
       },
       {
         accessorKey: "createdAt",
         header: "作成日",
         cell: ({ row }) =>
-          DateUtility.convertToLocalDateTime(row.getValue("createdAt")),
+          DateUtility.convertJstYYYYMMDDHHMM(row.getValue("createdAt")),
       },
     ],
     data: !!dataGetNovels?.success ? dataGetNovels.data.novels : [],

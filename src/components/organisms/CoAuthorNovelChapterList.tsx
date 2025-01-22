@@ -114,7 +114,7 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
         <div className='mx-4'>
           <SubParagraph>
             最終更新日:{" "}
-            {DateUtility.convertToLocalDateTime(
+            {DateUtility.convertJstYYYYMMDDHHMM(
               String(dataGetNovelChapters.data.novel.updatedAt),
             )}
           </SubParagraph>
