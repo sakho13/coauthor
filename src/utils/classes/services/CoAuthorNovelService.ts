@@ -4,6 +4,11 @@ import { CoAuthorNovelRepository } from "../repositories/CoAuthorNovelRepository
 export class CoAuthorNovelService {
   constructor(private novelRepository: CoAuthorNovelRepository) {}
 
+  public static create() {
+    const novelRepository = new CoAuthorNovelRepository()
+    return new CoAuthorNovelService(novelRepository)
+  }
+
   public async fetchNovel(userId: string, novelId: string) {
     const novel = await this.novelRepository.fetchNovel(userId, novelId)
     if (!novel) {

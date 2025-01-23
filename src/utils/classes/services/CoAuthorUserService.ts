@@ -15,6 +15,11 @@ export class CoAuthorUserService {
     this.userRepository = userRepository
   }
 
+  public static create() {
+    const userRepository = new CoAuthorUserRepository()
+    return new CoAuthorUserService(userRepository)
+  }
+
   public async registerAndLoginByFirebaseUid(
     firebaseUid: string,
     userData: UserData,
