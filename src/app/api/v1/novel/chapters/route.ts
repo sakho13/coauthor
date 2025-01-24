@@ -75,6 +75,8 @@ export async function GET(req: NextRequest) {
           id: chapter.id,
           order: chapter.order,
           title: chapter.title,
+          createdAt: chapter.createdAt.toISOString(),
+          updatedAt: chapter.updatedAt.toISOString(),
         })),
       },
     }

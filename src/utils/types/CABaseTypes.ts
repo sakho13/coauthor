@@ -26,3 +26,8 @@ export type CoAuthor_NovelChapter = {
   title: string
   content: string
 }
+
+export type CoAuthor_NovelChapter_AppendedDate = CoAuthor_NovelChapter & {
+  updatedAt: string
+  createdAt: string
+}

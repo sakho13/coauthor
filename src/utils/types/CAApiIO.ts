@@ -2,6 +2,7 @@ import {
   CoAuthor_Novel,
   CoAuthor_Novel_AppendedDate,
   CoAuthor_NovelChapter,
+  CoAuthor_NovelChapter_AppendedDate,
 } from "./CABaseTypes"
 
 export type ApiV1BaseOut<T> =
@@ -145,7 +146,7 @@ export type ApiV1 = {
     Get: {
       Out: {
         novel: CoAuthor_Novel_AppendedDate
-        chapters: Omit<CoAuthor_NovelChapter, "content">[]
+        chapters: Omit<CoAuthor_NovelChapter_AppendedDate, "content">[]
       }
     }
 
