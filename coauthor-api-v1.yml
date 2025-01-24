@@ -246,6 +246,10 @@ paths:
                           type: integer
                         title:
                           type: string
+                        createdAt:
+                          $ref: "#/components/schemas/CreatedAt"
+                        updatedAt:
+                          $ref: "#/components/schemas/UpdatedAt"
     post:
       summary: 小説章の順序更新
       parameters:
@@ -348,6 +352,32 @@ components:
             - SERIAL
             - SINGLE
           description: "SERIAL: 連載, SINGLE: 短編"
+        updatedAt:
+          $ref: "#/components/schemas/UpdatedAt"
+        createdAt:
+          $ref: "#/components/schemas/CreatedAt"
+    CoAuthor_NovelChapter:
+      type: object
+      properties:
+        id:
+          type: string
+        order:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+    CoAuthor_NovelChapter_AppendedDate:
+      type: object
+      properties:
+        id:
+          type: string
+        order:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
         updatedAt:
           $ref: "#/components/schemas/UpdatedAt"
         createdAt:
