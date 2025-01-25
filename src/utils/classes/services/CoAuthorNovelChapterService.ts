@@ -94,7 +94,7 @@ export class CoAuthorNovelChapterService {
     content: string,
   ) {
     const novelNum = await this.novelRepository.countOwnNovels(userId, novelId)
-    if (novelNum === 0) {
+    if (novelNum <= 0) {
       throw new CoAuthorError({
         code: "NOVEL_NOT_FOUND",
         message: "小説が見つかりません。",
