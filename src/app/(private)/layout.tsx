@@ -1,5 +1,6 @@
 "use client"
 
+import { FullScreenLoading } from "@/components/atoms/FullScreenLoading"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,15 +26,7 @@ import { firebaseClient } from "@/utils/firebaseClient"
 import { useGetNovels } from "@/utils/hooks/useNovels"
 import { useAuthStore } from "@/utils/stores/useAuthStore"
 import { signOut } from "firebase/auth"
-import {
-  Home,
-  Plus,
-  User,
-  LibraryBig,
-  LogOut,
-  ChevronUp,
-  Loader,
-} from "lucide-react"
+import { Home, Plus, User, LibraryBig, LogOut, ChevronUp } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
@@ -54,11 +47,7 @@ export default function PrivateLayout({ children }: Props) {
   }
 
   if (!accessToken) {
-    return (
-      <div className='flex items-center justify-center h-screen'>
-        <Loader className='animate-spin' />
-      </div>
-    )
+    return <FullScreenLoading />
   }
 
   return (
