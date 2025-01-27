@@ -44,9 +44,14 @@ export class CoAuthorNovelChapterService {
       })
     }
 
+    const latestOrder =
+      await this.novelChapterRepository.fetchLatestChapterOrder(userId, novelId)
+    const order = latestOrder ? latestOrder + 1 : 1
+
     return await this.novelChapterRepository.addNewChapter(
       userId,
       novelId,
+      order,
       title,
     )
   }
@@ -61,7 +66,7 @@ export class CoAuthorNovelChapterService {
   public async fetchChapterContent(
     userId: string,
     novelId: string,
-    chapterId: number,
+    chapterId: string,
   ) {
     const novelNum = await this.novelRepository.countOwnNovels(userId, novelId)
     if (novelNum === 0) {
@@ -90,7 +95,7 @@ export class CoAuthorNovelChapterService {
   public async updateChapterContent(
     userId: string,
     novelId: string,
-    chapterId: number,
+    chapterId: string,
     content: string,
   ) {
     const novelNum = await this.novelRepository.countOwnNovels(userId, novelId)

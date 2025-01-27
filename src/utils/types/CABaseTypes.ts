@@ -21,7 +21,7 @@ export const Novel_Type = {
 } as const
 
 export type CoAuthor_NovelChapter = {
-  id: number
+  id: string
   order: number
   title: string
   content: string

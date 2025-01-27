@@ -28,7 +28,27 @@ export class CoAuthorNovelChapterRepository {
     })
   }
 
-  public async addNewChapter(userId: string, novelId: string, title: string) {
+  public async fetchLatestChapterOrder(userId: string, novelId: string) {
+    const chapter = await prisma.chapter.aggregate({
+      _max: {
+        order: true,
+      },
+      where: {
+        novel: {
+          authorId: userId,
+        },
+        novelId,
+      },
+    })
+    return chapter._max.order
+  }
+
+  public async addNewChapter(
+    userId: string,
+    novelId: string,
+    newOrder: number,
+    title: string,
+  ) {
     return await prisma.chapter.create({
       data: {
         title,
@@ -39,6 +59,7 @@ export class CoAuthorNovelChapterRepository {
             authorId: userId,
           },
         },
+        order: newOrder,
       },
     })
   }
@@ -46,7 +67,7 @@ export class CoAuthorNovelChapterRepository {
   public async fetchChapterContent(
     userId: string,
     novelId: string,
-    chapterId: number,
+    chapterId: string,
   ) {
     return await prisma.chapter.findFirst({
       select: {
@@ -57,7 +78,7 @@ export class CoAuthorNovelChapterRepository {
           authorId: userId,
         },
         novelId,
-        id: Number(chapterId),
+        id: chapterId,
       },
     })
   }
@@ -65,7 +86,7 @@ export class CoAuthorNovelChapterRepository {
   public async updateChapterContent(
     userId: string,
     novelId: string,
-    chapterId: number,
+    chapterId: string,
     content: string,
   ) {
     return await prisma.chapter.update({

@@ -110,7 +110,7 @@ export type ApiV1 = {
 
       Out: {
         novelId: string
-        chapterId: number
+        chapterId: string
         title: string
       }
     }
@@ -120,7 +120,7 @@ export type ApiV1 = {
     Get: {
       Out: {
         novelId: string
-        chapterId: number
+        chapterId: string
         content: string
       }
     }
@@ -131,13 +131,13 @@ export type ApiV1 = {
     Post: {
       In: {
         novelId: string
-        chapterId: number
+        chapterId: string
         content: string
       }
 
       Out: {
         novelId: string
-        chapterId: number
+        chapterId: string
       }
     }
   }
@@ -154,7 +154,7 @@ export type ApiV1 = {
       In: {
         novelId: string
         orders: {
-          chapterId: number
+          chapterId: string
           order: number
         }[]
       }

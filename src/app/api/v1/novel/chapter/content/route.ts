@@ -45,20 +45,6 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    const parseIntChapterId = parseInt(chapterId)
-    if (isNaN(parseIntChapterId)) {
-      throw new CoAuthorError({
-        code: "INVALID_PARAMS",
-        message: "リクエスト内容に不整合があります。",
-        columns: [
-          {
-            name: "chapter_id",
-            message: "数値である必要があります。",
-          },
-        ],
-      })
-    }
-
     const userService = CoAuthorUserService.create()
     const novelChapterService = CoAuthorNovelChapterService.create()
 
@@ -68,13 +54,13 @@ export async function GET(req: NextRequest) {
       success: true,
       data: {
         novelId: novelId,
-        chapterId: parseIntChapterId,
+        chapterId,
         content:
           (
             await novelChapterService.fetchChapterContent(
               user.id,
               novelId,
-              parseIntChapterId,
+              chapterId,
             )
           )?.content ?? "",
       },
@@ -140,7 +126,7 @@ function _validatePost(data: unknown): ApiV1ErrorOut | null {
       columns: [{ name: "novelId", message: "小説IDは必須です" }],
     }
 
-  if (!("chapterId" in data) || typeof data.chapterId !== "number")
+  if (!("chapterId" in data) || typeof data.chapterId !== "string")
     return {
       code: "INVALID_DATA",
       message: "入力値が不十分です。",
@@ -159,7 +145,7 @@ function _validatePost(data: unknown): ApiV1ErrorOut | null {
       name: "novelId",
       message: "小説IDは必須です",
     })
-  if (data.chapterId > 0)
+  if (data.chapterId.length > 0)
     columns.push({
       name: "chapterId",
       message: "章IDは必須です",
