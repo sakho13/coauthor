@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
 
     const novelId = req.nextUrl.searchParams.get("novel_id")
     const chapterId = req.nextUrl.searchParams.get("chapter_id")
+    const order = req.nextUrl.searchParams.get("order")
 
     if (novelId === null) {
       throw new CoAuthorError({
@@ -32,14 +33,28 @@ export async function GET(req: NextRequest) {
         ],
       })
     }
-    if (chapterId === null) {
+    if (order === null) {
       throw new CoAuthorError({
         code: "INVALID_PARAMS",
         message: "リクエスト内容に不整合があります。",
         columns: [
           {
-            name: "chapter_id",
+            name: "order",
             message: "必須パラメータです。",
+          },
+        ],
+      })
+    }
+
+    const numberOrder = parseInt(order, 10)
+    if (isNaN(numberOrder) || numberOrder < 1) {
+      throw new CoAuthorError({
+        code: "INVALID_PARAMS",
+        message: "リクエスト内容に不整合があります。",
+        columns: [
+          {
+            name: "order",
+            message: "1以上の整数を指定してください。",
           },
         ],
       })
@@ -60,7 +75,7 @@ export async function GET(req: NextRequest) {
             await novelChapterService.fetchChapterContent(
               user.id,
               novelId,
-              chapterId,
+              numberOrder,
             )
           )?.content ?? "",
       },

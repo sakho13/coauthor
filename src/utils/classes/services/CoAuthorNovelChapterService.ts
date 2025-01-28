@@ -60,13 +60,13 @@ export class CoAuthorNovelChapterService {
    * 小説本文を取得する
    * @param userId
    * @param novelId
-   * @param chapterId
+   * @param order
    * @returns
    */
   public async fetchChapterContent(
     userId: string,
     novelId: string,
-    chapterId: string,
+    order: number,
   ) {
     const novelNum = await this.novelRepository.countOwnNovels(userId, novelId)
     if (novelNum === 0) {
@@ -80,7 +80,7 @@ export class CoAuthorNovelChapterService {
     return await this.novelChapterRepository.fetchChapterContent(
       userId,
       novelId,
-      chapterId,
+      order,
     )
   }
 

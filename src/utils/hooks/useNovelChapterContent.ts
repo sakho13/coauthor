@@ -2,7 +2,7 @@ import useSWRImmutable from "swr/immutable"
 import { useAuthStore } from "../stores/useAuthStore"
 import { apiV1GetFetcher } from "../functions/apiV1Fetchers"
 
-export function useGetNovelChapterContent(novelId: string, chapterId: string) {
+export function useGetNovelChapterContent(novelId: string, order: number) {
   const { accessToken } = useAuthStore()
 
   const { data, error, isLoading, mutate } = useSWRImmutable(
@@ -11,7 +11,7 @@ export function useGetNovelChapterContent(novelId: string, chapterId: string) {
       accessToken
         ? apiV1GetFetcher(
             "NovelChapterContent",
-            `${url}?novel_id=${novelId}&chapter_id=${chapterId}`,
+            `${url}?novel_id=${novelId}&order=${order}`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
