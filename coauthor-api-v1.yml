@@ -161,11 +161,12 @@ paths:
           required: true
           schema:
             type: string
-        - name: chapter_id
+        - name: order
           in: query
           required: true
           schema:
-            type: string
+            type: integer
+            minimum: 1
       responses:
         "200":
           description: OK
