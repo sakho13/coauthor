@@ -3,19 +3,6 @@
 import { useGetNovelChapters } from "@/utils/hooks/useNovelChapters"
 import { SubParagraph } from "../atoms/SubParagraph"
 import { DateUtility } from "@/utils/utilities/DateUtility"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table"
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
 import { Button } from "../ui/button"
 import { useRouter } from "next/navigation"
 import {
@@ -34,6 +21,7 @@ import { useState } from "react"
 import { useApiV1 } from "@/utils/hooks/useApiV1"
 import { toast } from "sonner"
 import { useAuthStore } from "@/utils/stores/useAuthStore"
+import { joinClassName } from "@/utils/functions/joinClassName"
 
 type Props = {
   novelId: string
@@ -52,20 +40,6 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
 
   const router = useRouter()
 
-  const table = useReactTable({
-    columns: [
-      {
-        accessorKey: "title",
-        header: "タイトル",
-        cell: ({ row }) => <p className='w-[300px]'>{row.getValue("title")}</p>,
-      },
-    ],
-    data: dataGetNovelChapters?.success
-      ? dataGetNovelChapters.data.chapters
-      : [],
-    getCoreRowModel: getCoreRowModel(),
-  })
-
   if (isLoadingGetNovelChapters) {
     return <p>読み込み中...</p>
   }
@@ -76,7 +50,10 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
 
   return (
     <div id='coauthor-novel-chapter-list' className=''>
-      <div id={`novel-title-${dataGetNovelChapters.data.novel.id}`}>
+      <div
+        id={`novel-title-${dataGetNovelChapters.data.novel.id}`}
+        className='mb-4'
+      >
         <HeaderParagraph>
           <h2 className='text-lg'>{dataGetNovelChapters.data.novel.title}</h2>
 
@@ -110,68 +87,86 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
             </DialogContent>
           </Dialog>
         </HeaderParagraph>
-
-        <div className='mx-4'>
-          <SubParagraph>
-            最終更新日:{" "}
-            {DateUtility.convertJstYYYYMMDDHHMM(
-              String(dataGetNovelChapters.data.novel.updatedAt),
-            )}
-          </SubParagraph>
-        </div>
       </div>
 
       <div
         id={`novel-chapters-${dataGetNovelChapters.data.novel.id}`}
-        className='mx-4'
+        className='mx-4 grid grid-cols-2 gap-6'
       >
-        <Table className='min-w-[600px]'>
-          <TableHeader className='select-none'>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className=''>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
+        <div className='overflow-y-auto overflow-x-clip border px-8'>
+          {dataGetNovelChapters.data.chapters.map((chapter, i) => (
+            <div
+              key={`novel-chapter-${dataGetNovelChapters.data.novel.id}-${chapter.id}`}
+              className='w-full'
+            >
+              {i !== 0 && <div className='border-b' />}
 
-          <TableBody>
-            {table.getRowModel().rows.length > 0 ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={`novel-row-${row.id}`}
-                  className='cursor-pointer'
-                  onClick={() => {
-                    router.push(`/novel/${novelId}/c/${row.original.id}`)
-                  }}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={`novel-cell-${row.id}-${cell.id}`}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={4} className='h-24 text-center'>
-                  <p>執筆中の小説はありません。</p>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              <div
+                className={joinClassName(
+                  "flex justify-between flex-col",
+                  "py-4",
+                  "w-full",
+                )}
+              >
+                <div className='flex justify-between'>
+                  <div className='flex truncate'>
+                    <span className='bg-teal-100 h-fit select-none px-1 mr-2'>
+                      ep{chapter.order}
+                    </span>
+
+                    <p className='w-full truncate'>{chapter.title}</p>
+                  </div>
+                  <Button
+                    onClick={() =>
+                      router.push(`/novel/${novelId}/c/${chapter.order}`)
+                    }
+                    variant='link'
+                    className=''
+                  >
+                    編集
+                  </Button>
+                </div>
+
+                <p className='text-sm text-gray-500'>
+                  編集日時:{" "}
+                  {DateUtility.convertJstYYYYMMDDHHMM(chapter.updatedAt)}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div id='' className=''>
+          <div
+            id='date-bar'
+            className='px-4 mb-4 grid grid-cols-2 gap-4 border-b'
+          >
+            <SubParagraph>
+              最終更新日時:{" "}
+              {DateUtility.convertJstYYYYMMDDHHMM(
+                String(dataGetNovelChapters.data.novel.updatedAt),
+              )}
+            </SubParagraph>
+            <SubParagraph>
+              作成日時:{" "}
+              {DateUtility.convertJstYYYYMMDDHHMM(
+                String(dataGetNovelChapters.data.novel.createdAt),
+              )}
+            </SubParagraph>
+          </div>
+
+          <div className=''>
+            <div className='flex items-center'>
+              <h1 className='font-bold'>概要</h1>
+            </div>
+
+            <div className='mx-4'>
+              {dataGetNovelChapters.data.novel.summary || (
+                <SubParagraph>未入力</SubParagraph>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -191,7 +186,7 @@ function useCoAuthorNovelChapterList(novelId: string) {
   const { postChapter } = useApiV1()
 
   const onChangeNewChapterTitle = (value: string) => {
-    setNewChapterTitle(value.trim())
+    setNewChapterTitle(value)
   }
 
   const createNewChapter = async () => {
