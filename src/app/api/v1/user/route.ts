@@ -3,6 +3,7 @@ import { CoAuthorUserService } from "@/utils/classes/services/CoAuthorUserServic
 import { CoAuthorUserRepository } from "@/utils/classes/repositories/CoAuthorUserRepository"
 import { ApiV1 } from "@/utils/types/CAApiIO"
 import { NextRequest, NextResponse } from "next/server"
+import { prisma } from "@/utils/prisma"
 
 export async function GET(req: NextRequest) {
   const api = new CoAuthorApi<ApiV1["User"]["Get"]["Out"]>()
@@ -12,7 +13,7 @@ export async function GET(req: NextRequest) {
       api.parseAuthorizationHeader(req),
     )
 
-    const userRepository = new CoAuthorUserRepository()
+    const userRepository = new CoAuthorUserRepository(prisma)
     const caUser = new CoAuthorUserService(userRepository)
 
     const { user } = await caUser.registerAndLoginByFirebaseUid(token.uid, {
@@ -49,7 +50,7 @@ export async function POST(req: NextRequest) {
       api.parseAuthorizationHeader(req),
     )
 
-    const userRepository = new CoAuthorUserRepository()
+    const userRepository = new CoAuthorUserRepository(prisma)
     const caUser = new CoAuthorUserService(userRepository)
 
     const { status: loginResult, user } =
