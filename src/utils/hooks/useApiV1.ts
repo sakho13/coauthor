@@ -58,11 +58,27 @@ export function useApiV1() {
     return _parseResponse<ApiV1["NovelChapter"]["Post"]["Out"]>(result)
   }
 
+  /**
+   * POST /api/v1/novel/chapter/content
+   */
+  async function postChapterContent(
+    accessToken: string,
+    input: ApiV1["NovelChapterContent"]["Post"]["In"],
+  ) {
+    const result = await fetch("/api/v1/novel/chapter/content", {
+      method: "POST",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["NovelChapterContent"]["Post"]["Out"]>(result)
+  }
+
   return {
     postUser,
     postNovel,
     deleteNovel,
     postChapter,
+    postChapterContent,
   }
 }
 
