@@ -16,10 +16,7 @@ export async function GET(req: NextRequest) {
     const userRepository = new CoAuthorUserRepository(prisma)
     const caUser = new CoAuthorUserService(userRepository)
 
-    const { user } = await caUser.registerAndLoginByFirebaseUid(token.uid, {
-      email: token.email,
-      username: token.name ?? "unknown",
-    })
+    const user = await caUser.fetchUserByFirebaseUid(token.uid)
 
     return {
       success: true,
@@ -28,6 +25,8 @@ export async function GET(req: NextRequest) {
           id: user.id,
           email: user.email,
           name: user.name,
+          createdAt: user.createdAt.toISOString(),
+          updatedAt: user.updatedAt.toISOString(),
         },
       },
     }
@@ -43,7 +42,7 @@ export async function GET(req: NextRequest) {
  * @returns
  */
 export async function POST(req: NextRequest) {
-  const api = new CoAuthorApi<ApiV1["User"]["Get"]["Out"]>()
+  const api = new CoAuthorApi<ApiV1["User"]["Post"]["Out"]>()
 
   const result = await api.execute(async () => {
     const token = await api.verifyAuthorizationHeader(

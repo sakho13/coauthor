@@ -36,6 +36,8 @@ export type ApiV1 = {
           id: string
           email: string
           name: string
+          createdAt: string
+          updatedAt: string
         }
       }
     }
