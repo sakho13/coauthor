@@ -32,6 +32,10 @@ paths:
                         type: string
                       email:
                         type: string
+                      createdAt:
+                        $ref: "#/components/schemas/CreatedAt"
+                      updatedAt:
+                        $ref: "#/components/schemas/UpdatedAt"
     post:
       summary: ユーザ情報の登録
       description: ユーザ登録のタイミングで実行される。<br>
