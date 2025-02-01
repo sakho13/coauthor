@@ -34,6 +34,8 @@ paths:
                         type: string
     post:
       summary: ユーザ情報の登録
+      description: ユーザ登録のタイミングで実行される。<br>
+        登録のタイミングで失敗した場合、ログイン画面から再登録を促す。
       parameters:
         - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
@@ -58,6 +60,40 @@ paths:
                     enum:
                       - EXISTS
                       - CREATED
+    patch:
+      summary: ユーザ情報の更新
+      tags:
+        - InDevelopment
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  nullable: true
+      responses:
+        "200":
+          description: OK<br>
+            現在のユーザ情報をすべて返却する。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      email:
+                        type: string
 
   /v1/user/history:
     get:
