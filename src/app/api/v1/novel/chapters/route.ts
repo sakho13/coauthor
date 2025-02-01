@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    const userRepo = new CoAuthorUserRepository()
+    const userRepo = new CoAuthorUserRepository(prisma)
     const novelRepo = new CoAuthorNovelRepository()
 
     const userService = new CoAuthorUserService(userRepo)
