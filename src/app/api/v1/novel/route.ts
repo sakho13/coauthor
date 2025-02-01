@@ -90,7 +90,7 @@ export async function DELETE(req: NextRequest) {
     )
       throw new Error("Invalid data")
 
-    const userRepo = new CoAuthorUserRepository()
+    const userRepo = new CoAuthorUserRepository(prisma)
     const novelRepo = new CoAuthorNovelRepository()
 
     const userService = new CoAuthorUserService(userRepo)
