@@ -123,6 +123,7 @@ export type ApiV1 = {
       Out: {
         novelId: string
         chapterId: string
+        title: string
         content: string
       }
     }
