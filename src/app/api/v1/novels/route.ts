@@ -1,4 +1,8 @@
 import { CoAuthorApi } from "@/utils/classes/CoAuthorApi"
+import { CoAuthorNovelRepository } from "@/utils/classes/repositories/CoAuthorNovelRepository"
+import { CoAuthorUserRepository } from "@/utils/classes/repositories/CoAuthorUserRepository"
+import { CoAuthorNovelService } from "@/utils/classes/services/CoAuthorNovelService"
+import { CoAuthorUserService } from "@/utils/classes/services/CoAuthorUserService"
 import { prisma } from "@/utils/prisma"
 import { ApiV1 } from "@/utils/types/CAApiIO"
 import { Novel_Type } from "@/utils/types/CABaseTypes"
@@ -17,18 +21,20 @@ export async function GET(req: NextRequest) {
       api.parseAuthorizationHeader(req),
     )
 
-    const result = await prisma.novel.findMany({
-      where: {
-        author: {
-          firebaseUid: token.uid,
-        },
-      },
-    })
+    const userService = new CoAuthorUserService(
+      new CoAuthorUserRepository(prisma),
+    )
+
+    const user = await userService.fetchUserByFirebaseUid(token.uid)
+
+    const novelService = new CoAuthorNovelService(new CoAuthorNovelRepository())
+
+    const novels = await novelService.fetchNovels(user.id)
 
     return {
       success: true,
       data: {
-        novels: result.map((novel) => ({
+        novels: novels.map((novel) => ({
           id: novel.id,
           title: novel.title,
           summary: novel.summary,

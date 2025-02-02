@@ -9,6 +9,10 @@ export class CoAuthorNovelService {
     return new CoAuthorNovelService(novelRepository)
   }
 
+  public async fetchNovels(userId: string) {
+    return await this.novelRepository.fetchNovels(userId)
+  }
+
   public async fetchNovel(userId: string, novelId: string) {
     const novel = await this.novelRepository.fetchNovel(userId, novelId)
     if (!novel) {
