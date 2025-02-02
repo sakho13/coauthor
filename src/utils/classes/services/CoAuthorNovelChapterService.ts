@@ -57,7 +57,7 @@ export class CoAuthorNovelChapterService {
   }
 
   /**
-   * 小説本文を取得する
+   * 章情報を取得する
    * @param userId
    * @param novelId
    * @param order
@@ -77,7 +77,7 @@ export class CoAuthorNovelChapterService {
       })
     }
 
-    return await this.novelChapterRepository.fetchChapterContent(
+    return await this.novelChapterRepository.fetchChapter(
       userId,
       novelId,
       order,

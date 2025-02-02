@@ -64,15 +64,8 @@ export class CoAuthorNovelChapterRepository {
     })
   }
 
-  public async fetchChapterContent(
-    userId: string,
-    novelId: string,
-    order: number,
-  ) {
+  public async fetchChapter(userId: string, novelId: string, order: number) {
     return await prisma.chapter.findFirst({
-      select: {
-        content: true,
-      },
       where: {
         novel: {
           authorId: userId,

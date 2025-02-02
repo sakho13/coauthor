@@ -1,7 +1,9 @@
 import { CoAuthorApi } from "@/utils/classes/CoAuthorApi"
 import { CoAuthorError } from "@/utils/classes/CoAuthorError"
+import { CoAuthorUserRepository } from "@/utils/classes/repositories/CoAuthorUserRepository"
 import { CoAuthorNovelChapterService } from "@/utils/classes/services/CoAuthorNovelChapterService"
 import { CoAuthorUserService } from "@/utils/classes/services/CoAuthorUserService"
+import { prisma } from "@/utils/prisma"
 import {
   ApiV1,
   ApiV1ErrorOut,
@@ -18,7 +20,6 @@ export async function GET(req: NextRequest) {
     )
 
     const novelId = req.nextUrl.searchParams.get("novel_id")
-    const chapterId = req.nextUrl.searchParams.get("chapter_id")
     const order = req.nextUrl.searchParams.get("order")
 
     if (novelId === null) {
@@ -60,24 +61,33 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    const userService = CoAuthorUserService.create()
+    const userService = new CoAuthorUserService(
+      new CoAuthorUserRepository(prisma),
+    )
     const novelChapterService = CoAuthorNovelChapterService.create()
 
     const user = await userService.fetchUserByFirebaseUid(token.uid)
+    const chapter = await novelChapterService.fetchChapterContent(
+      user.id,
+      novelId,
+      numberOrder,
+    )
+
+    if (chapter === null) {
+      throw new CoAuthorError({
+        code: "CHAPTER_NOT_FOUND",
+        message: "指定された章が見つかりません。",
+        columns: [],
+      })
+    }
 
     return {
       success: true,
       data: {
         novelId: novelId,
-        chapterId,
-        content:
-          (
-            await novelChapterService.fetchChapterContent(
-              user.id,
-              novelId,
-              numberOrder,
-            )
-          )?.content ?? "",
+        chapterId: chapter.id,
+        title: chapter.title,
+        content: chapter.content,
       },
     }
   })
@@ -100,7 +110,9 @@ export async function POST(req: NextRequest) {
     )
       throw new Error("Invalid data")
 
-    const userService = CoAuthorUserService.create()
+    const userService = new CoAuthorUserService(
+      new CoAuthorUserRepository(prisma),
+    )
     const novelChapterService = CoAuthorNovelChapterService.create()
 
     const user = await userService.fetchUserByFirebaseUid(token.uid)
