@@ -161,7 +161,7 @@ function useCoAuthorStoryEditor(novelId: string, order: number) {
     setEditorState(
       EditorState.createWithContent(contentState, coAuthorDecorator),
     )
-    // setNovelTitle(dataGetNovelChapterContent.data)
+    setNovelTitle(dataGetNovelChapterContent.data.title)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataGetNovelChapterContent])
 
