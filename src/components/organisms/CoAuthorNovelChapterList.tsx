@@ -17,11 +17,12 @@ import { HeaderParagraph } from "../atoms/HeaderParagraph"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { Plus } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useApiV1 } from "@/utils/hooks/useApiV1"
 import { toast } from "sonner"
 import { useAuthStore } from "@/utils/stores/useAuthStore"
 import { joinClassName } from "@/utils/functions/joinClassName"
+import { CoAuthor_NovelChapter_AppendedDate } from "@/utils/types/CABaseTypes"
 
 type Props = {
   novelId: string
@@ -30,6 +31,8 @@ type Props = {
 export function CoAuthorNovelChapterList({ novelId }: Props) {
   const {
     dataGetNovelChapters,
+    novelTitle,
+    chapters,
     isLoadingGetNovelChapters,
     newChapterTitle,
     isDialogOpen,
@@ -55,7 +58,7 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
         className='mb-4'
       >
         <HeaderParagraph>
-          <h2 className='text-lg'>{dataGetNovelChapters.data.novel.title}</h2>
+          <h2 className='text-lg'>{novelTitle}</h2>
 
           <Dialog
             open={isDialogOpen}
@@ -94,7 +97,7 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
         className='mx-4 grid grid-cols-2 gap-6'
       >
         <div className='overflow-y-auto overflow-x-clip border px-8'>
-          {dataGetNovelChapters.data.chapters.map((chapter, i) => (
+          {chapters.map((chapter, i) => (
             <div
               key={`novel-chapter-${dataGetNovelChapters.data.novel.id}-${chapter.id}`}
               className='w-full'
@@ -183,6 +186,11 @@ function useCoAuthorNovelChapterList(novelId: string) {
   const [newChapterTitle, setNewChapterTitle] = useState("")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
+  const [title, setTitle] = useState<string>("")
+  const [chapters, setChapters] = useState<
+    Omit<CoAuthor_NovelChapter_AppendedDate, "content">[]
+  >([])
+
   const { postChapter } = useApiV1()
 
   const onChangeNewChapterTitle = (value: string) => {
@@ -215,8 +223,17 @@ function useCoAuthorNovelChapterList(novelId: string) {
     setIsDialogOpen(state === "open")
   }
 
+  useEffect(() => {
+    if (dataGetNovelChapters?.success) {
+      setChapters(dataGetNovelChapters.data.chapters)
+      setTitle(dataGetNovelChapters.data.novel.title)
+    }
+  }, [dataGetNovelChapters])
+
   return {
     dataGetNovelChapters,
+    novelTitle: title,
+    chapters,
     isLoadingGetNovelChapters,
     newChapterTitle,
     isDialogOpen,
