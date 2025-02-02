@@ -1,13 +1,7 @@
 import useSWR from "swr"
 import useSWRImmutable from "swr/immutable"
 import { useAuthStore } from "../stores/useAuthStore"
-import { ApiV1BaseOut, ApiV1 } from "../types/CAApiIO"
-
-export const apiV1Fetcher = (...args: Parameters<typeof fetch>) =>
-  fetch(...args).then((res) => {
-    if (!res.ok) return res.json()
-    return res.json()
-  }) as Promise<ApiV1BaseOut<ApiV1["Novels"]["Get"]["Out"]>>
+import { apiV1GetFetcher } from "../functions/apiV1Fetchers"
 
 export function useGetNovels(immutable = false) {
   const { accessToken } = useAuthStore()
@@ -17,7 +11,7 @@ export function useGetNovels(immutable = false) {
     ["/api/v1/novels", accessToken],
     async ([url, accessToken]) =>
       accessToken
-        ? apiV1Fetcher(url, {
+        ? apiV1GetFetcher("Novels", url, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },

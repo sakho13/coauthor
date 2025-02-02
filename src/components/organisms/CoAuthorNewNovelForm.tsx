@@ -138,7 +138,7 @@ function useCoAuthorNewNovelForm() {
   }
 
   const onChangeTitle = (value: string) => {
-    setTitle(value.trim())
+    setTitle(value)
 
     if (titleValidate) {
       setTitleValidate(_validateTitle(value))

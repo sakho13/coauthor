@@ -1,32 +1,50 @@
 "use client"
+
+import { FullScreenLoading } from "@/components/atoms/FullScreenLoading"
 import { CoAuthorLoginForm } from "@/components/organisms/CoAuthorLoginForm"
 import { firebaseClient } from "@/utils/firebaseClient"
 import { joinClassName } from "@/utils/functions/joinClassName"
 import { useAuthStore } from "@/utils/stores/useAuthStore"
 import { ApiV1Utility } from "@/utils/utilities/ApiV1Utility"
 import { signOut } from "firebase/auth"
-import { redirect } from "next/navigation"
-import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 export default function Page() {
   const { accessToken } = useAuthStore()
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (accessToken) {
-      ApiV1Utility.postUser(accessToken).then((res) => {
-        if (res.success) {
-          toast.success("認証完了")
-          redirect("/home")
-        } else {
+      ApiV1Utility.postUser(accessToken)
+        .then((res) => {
+          if (res.success) {
+            toast.success("認証完了")
+            router.replace("/home")
+          } else {
+            signOut(firebaseClient.auth)
+            toast.error(`認証失敗（CODE: ${res.error.code}）`, {
+              description: res.error.message,
+            })
+            setIsLoading(false)
+          }
+        })
+        .catch((err) => {
           signOut(firebaseClient.auth)
-          toast.error(`認証失敗（CODE: ${res.error.code}）`, {
-            description: res.error.message,
-          })
-        }
-      })
+          toast.error("認証失敗", { description: err.message })
+          setIsLoading(false)
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    } else {
+      setIsLoading(false)
     }
-  }, [accessToken])
+  }, [accessToken, router])
+
+  if (isLoading) return <FullScreenLoading />
 
   return (
     <div

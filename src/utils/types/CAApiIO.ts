@@ -1,4 +1,9 @@
-import { CoAuthor_Novel, CoAuthor_NovelChapter } from "./CABaseTypes"
+import {
+  CoAuthor_Novel,
+  CoAuthor_Novel_AppendedDate,
+  CoAuthor_NovelChapter,
+  CoAuthor_NovelChapter_AppendedDate,
+} from "./CABaseTypes"
 
 export type ApiV1BaseOut<T> =
   | {
@@ -31,6 +36,8 @@ export type ApiV1 = {
           id: string
           email: string
           name: string
+          createdAt: string
+          updatedAt: string
         }
       }
     }
@@ -91,10 +98,7 @@ export type ApiV1 = {
   Novels: {
     Get: {
       Out: {
-        novels: (CoAuthor_Novel & {
-          updatedAt: Date
-          createdAt: Date
-        })[]
+        novels: CoAuthor_Novel_AppendedDate[]
       }
     }
   }
@@ -108,26 +112,35 @@ export type ApiV1 = {
 
       Out: {
         novelId: string
-        chapterId: number
+        chapterId: string
         title: string
       }
     }
   }
 
   NovelChapterContent: {
+    Get: {
+      Out: {
+        novelId: string
+        chapterId: string
+        title: string
+        content: string
+      }
+    }
+
     /**
      * Contentのみを更新する
      */
     Post: {
       In: {
         novelId: string
-        chapterId: number
+        chapterId: string
         content: string
       }
 
       Out: {
         novelId: string
-        chapterId: number
+        chapterId: string
       }
     }
   }
@@ -135,11 +148,8 @@ export type ApiV1 = {
   NovelChapters: {
     Get: {
       Out: {
-        novel: CoAuthor_Novel & {
-          updatedAt: Date
-          createdAt: Date
-        }
-        chapters: Omit<CoAuthor_NovelChapter, "content">[]
+        novel: CoAuthor_Novel_AppendedDate
+        chapters: Omit<CoAuthor_NovelChapter_AppendedDate, "content">[]
       }
     }
 
@@ -147,7 +157,7 @@ export type ApiV1 = {
       In: {
         novelId: string
         orders: {
-          chapterId: number
+          chapterId: string
           order: number
         }[]
       }
