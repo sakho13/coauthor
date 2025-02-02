@@ -220,6 +220,9 @@ paths:
                     properties:
                       novelId:
                         type: string
+                      title:
+                        type: string
+                        description: 章タイトル
                       chapterId:
                         type: string
                       content:
