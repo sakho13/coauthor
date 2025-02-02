@@ -7,7 +7,7 @@ jest.mock("../repositories/CoAuthorNovelRepository")
 jest.mock("../repositories/CoAuthorNovelChapterRepository")
 
 describe("CoAuthorNovelChapterService", () => {
-  describe("fetchChapterContent", () => {
+  describe("fetchChapter", () => {
     beforeEach(() => {
       jest.clearAllMocks()
       jest.resetAllMocks()
@@ -15,15 +15,22 @@ describe("CoAuthorNovelChapterService", () => {
 
     test("正常", async () => {
       const novelId = "sabc7o54dpqauf573ug3gotj"
-      const chapterId = 1
+      const chapterId = "gfdijnwiujn"
+      const order = 1
 
       const spyNovelRepository = jest
         .spyOn(CoAuthorNovelRepository.prototype, "countOwnNovels")
         .mockResolvedValueOnce(1)
       const spyNovelChapterRepository = jest
-        .spyOn(CoAuthorNovelChapterRepository.prototype, "fetchChapterContent")
+        .spyOn(CoAuthorNovelChapterRepository.prototype, "fetchChapter")
         .mockResolvedValueOnce({
+          novelId,
+          id: chapterId,
+          order: 1,
+          title: "title",
           content: "content",
+          updatedAt: new Date(),
+          createdAt: new Date(),
         })
 
       const novelChapterService = CoAuthorNovelChapterService.create()
@@ -31,9 +38,9 @@ describe("CoAuthorNovelChapterService", () => {
         novelChapterService.fetchChapterContent(
           "9c71bbab-917b-4114-bb39-4fb2ce08d515",
           novelId,
-          chapterId,
+          order,
         ),
-      ).resolves.toEqual({
+      ).resolves.toMatchObject({
         content: "content",
       })
       expect(spyNovelRepository).toHaveBeenCalled()
@@ -42,16 +49,23 @@ describe("CoAuthorNovelChapterService", () => {
 
     test("小説が見つからない", async () => {
       const novelId = "sabc7o54dpqauf573ug3gotj"
-      const chapterId = 1
+      const chapterId = "gfdijnwiujn"
+      const order = 1
 
       const spyCountOwnNovels = jest
         .spyOn(CoAuthorNovelRepository.prototype, "countOwnNovels")
         .mockResolvedValueOnce(0)
 
       const spyFetchChapterContent = jest
-        .spyOn(CoAuthorNovelChapterRepository.prototype, "fetchChapterContent")
+        .spyOn(CoAuthorNovelChapterRepository.prototype, "fetchChapter")
         .mockResolvedValueOnce({
+          novelId,
+          id: chapterId,
+          order: 1,
+          title: "title",
           content: "content",
+          updatedAt: new Date(),
+          createdAt: new Date(),
         })
 
       const novelChapterService = CoAuthorNovelChapterService.create()
@@ -59,7 +73,7 @@ describe("CoAuthorNovelChapterService", () => {
         novelChapterService.fetchChapterContent(
           "9c71bbab-917b-4114-bb39-4fb2ce08d515",
           novelId,
-          chapterId,
+          order,
         ),
       ).rejects.toThrow(CoAuthorError)
       expect(spyCountOwnNovels).toHaveBeenCalled()
@@ -75,7 +89,7 @@ describe("CoAuthorNovelChapterService", () => {
 
     test("正常", async () => {
       const novelId = "sabc7o54dpqauf573ug3gotj"
-      const chapterId = 1
+      const chapterId = "gfdijnwiujn"
 
       const spyNovelRepository = jest
         .spyOn(CoAuthorNovelRepository.prototype, "countOwnNovels")
@@ -105,7 +119,7 @@ describe("CoAuthorNovelChapterService", () => {
 
     test("小説が見つからない", async () => {
       const novelId = "sabc7o54dpqauf573ug3gotj"
-      const chapterId = 1
+      const chapterId = "gfdijnwiujn"
 
       const spyCountOwnNovels = jest
         .spyOn(CoAuthorNovelRepository.prototype, "countOwnNovels")
@@ -133,7 +147,7 @@ describe("CoAuthorNovelChapterService", () => {
 
     test("小説本文が70000文字以上", async () => {
       const novelId = "sabc7o54dpqauf573ug3gotj"
-      const chapterId = 1
+      const chapterId = "gfdijnwiujn"
 
       const spyNovelRepository = jest
         .spyOn(CoAuthorNovelRepository.prototype, "countOwnNovels")
