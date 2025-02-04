@@ -167,12 +167,12 @@ function _validatePost(data: unknown): ApiV1ErrorOut | null {
       columns: [{ name: "novelType", message: "小説種類は必須です" }],
     }
 
-  if (data.novelId.length > 0)
+  if (data.novelId.length < 0)
     columns.push({
       name: "novelId",
       message: "小説IDは必須です",
     })
-  if (data.chapterId.length > 0)
+  if (data.chapterId.length < 0)
     columns.push({
       name: "chapterId",
       message: "章IDは必須です",
