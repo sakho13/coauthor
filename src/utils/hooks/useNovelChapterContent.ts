@@ -6,7 +6,7 @@ export function useGetNovelChapterContent(novelId: string, order: number) {
   const { accessToken } = useAuthStore()
 
   const { data, error, isLoading, mutate } = useSWRImmutable(
-    ["/api/v1/novel/chapter/content", accessToken],
+    ["/api/v1/novel/chapter/content", accessToken, novelId, order],
     async ([url, accessToken]) =>
       accessToken
         ? apiV1GetFetcher(
