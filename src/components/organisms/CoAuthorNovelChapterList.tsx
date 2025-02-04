@@ -113,7 +113,7 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
               >
                 <div className='flex justify-between'>
                   <div className='flex truncate'>
-                    <span className='bg-teal-100 h-fit select-none px-1 mr-2'>
+                    <span className='bg-teal-100 text-teal-700 h-fit select-none px-1 mr-2'>
                       ep{chapter.order}
                     </span>
 
