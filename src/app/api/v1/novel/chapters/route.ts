@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    const userRepo = new CoAuthorUserRepository()
+    const userRepo = new CoAuthorUserRepository(prisma)
     const novelRepo = new CoAuthorNovelRepository()
 
     const userService = new CoAuthorUserService(userRepo)
@@ -68,13 +68,15 @@ export async function GET(req: NextRequest) {
           title: novel.title,
           summary: novel.summary,
           type: novel.type === 0 ? Novel_Type[0] : Novel_Type[1],
-          createdAt: novel.createdAt,
-          updatedAt: novel.updatedAt,
+          createdAt: novel.createdAt.toISOString(),
+          updatedAt: novel.updatedAt.toISOString(),
         },
         chapters: chapters.map((chapter) => ({
           id: chapter.id,
           order: chapter.order,
           title: chapter.title,
+          createdAt: chapter.createdAt.toISOString(),
+          updatedAt: chapter.updatedAt.toISOString(),
         })),
       },
     }
