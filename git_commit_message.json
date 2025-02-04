@@ -1,0 +1,86 @@
+{
+  "$schema": "https://bendera.github.io/vscode-commit-message-editor/schemas/config-v1.schema.json",
+  "configVersion": "1",
+  "staticTemplate": [
+    "🐛 バグ修正"
+  ],
+  "dynamicTemplate": [
+    "{Emoji} {Topic}",
+    "",
+    "{Description}"
+  ],
+  "tokens": [
+    {
+      "label": "Emoji",
+      "name": "Emoji",
+      "type": "enum",
+      "options": [
+        {
+          "label": "新機能追加",
+          "value": "✨",
+          "description": "新機能追加"
+        },
+        {
+          "label": "バグ修正",
+          "value": "🐛",
+          "description": "バグ修正"
+        },
+        {
+          "label": "テスト追加/修正",
+          "value": "✅",
+          "description": "テスト追加/修正"
+        },
+        {
+          "label": "README/コメント 修正/追加",
+          "value": "📝",
+          "description": "README/コメント 修正/追加"
+        },
+        {
+          "label": "実装中/一時追加",
+          "value": "🚧",
+          "description": "実装中/一時追加"
+        },
+        {
+          "label": "リファクタリング",
+          "value": "♻️",
+          "description": "リファクタリング"
+        },
+        {
+          "label": "コンフィグ追加/修正",
+          "value": "🔧",
+          "description": "コンフィグ追加/修正"
+        },
+        {
+          "label": "CI設定の変更 / 追加",
+          "value": "👷",
+          "description": "CI設定の変更 / 追加"
+        },
+        {
+          "label": "ライブラリの追加 / アップデート",
+          "value": "📦️",
+          "description": "ライブラリの追加 / アップデート"
+        },
+        {
+          "label": "スタイルの追加・改善",
+          "value": "💄",
+          "description": "スタイルの追加・改善"
+        }
+      ]
+    },
+    {
+      "label": "Topic",
+      "name": "Topic",
+      "type": "text",
+      "description": "修正内容",
+      "lines": 5
+    },
+    {
+      "label": "Description",
+      "name": "Description",
+      "type": "text",
+      "description": "修正詳細",
+      "multiline": true,
+      "lines": 5
+    }
+  ]
+}
