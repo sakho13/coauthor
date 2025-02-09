@@ -146,6 +146,43 @@ paths:
                 properties:
                   novel:
                     $ref: "#/components/schemas/CoAuthor_Novel"
+    patch:
+      summary: 小説情報マスタの更新
+      description: 更新を行う項目のみを指定する。<br>
+        novelIdは必須。
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - novelId
+              properties:
+                novelId:
+                  type: string
+                title:
+                  type: string
+                summary:
+                  type: string
+                novelType:
+                  type: string
+                  enum:
+                    - 0
+                    - 1
+                  description: "0: 連載, 1: 短編"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  novel:
+                    $ref: "#/components/schemas/CoAuthor_Novel"
     delete:
       summary: 小説情報マスタの削除
       parameters:
