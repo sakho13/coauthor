@@ -1,3 +1,4 @@
+import { Novel_Type } from "@/utils/types/CABaseTypes"
 import { CoAuthorError } from "../CoAuthorError"
 import { CoAuthorNovelRepository } from "../repositories/CoAuthorNovelRepository"
 
@@ -7,6 +8,25 @@ export class CoAuthorNovelService {
   public static create() {
     const novelRepository = new CoAuthorNovelRepository()
     return new CoAuthorNovelService(novelRepository)
+  }
+
+  public async updateNovelData(
+    userId: string,
+    novelId: string,
+    updates: Partial<{
+      title: string
+      summary: string
+      type: keyof typeof Novel_Type
+    }>,
+  ) {
+    const exists = await this.novelRepository.existsNovel(userId, novelId)
+    if (!exists) {
+      throw new CoAuthorError({
+        code: "NOVEL_NOT_FOUND",
+        message: "小説が見つかりませんでした。",
+      })
+    }
+    return await this.novelRepository.updateNovelData(userId, novelId, updates)
   }
 
   public async fetchNovels(userId: string) {
