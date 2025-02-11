@@ -23,7 +23,7 @@ export class CoAuthorNovelService {
       userId,
       `小説タイトル${count}`,
       "",
-      1,
+      0,
     )
   }
 
