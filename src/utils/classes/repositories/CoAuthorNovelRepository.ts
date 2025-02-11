@@ -2,6 +2,9 @@ import { prisma } from "@/utils/prisma"
 import { Novel_Type } from "@/utils/types/CABaseTypes"
 
 export class CoAuthorNovelRepository {
+  /**
+   * 小説一覧を取得します。
+   */
   public async fetchNovels(userId: string) {
     return await prisma.novel.findMany({
       where: {
@@ -10,6 +13,9 @@ export class CoAuthorNovelRepository {
     })
   }
 
+  /**
+   * 小説を取得します。
+   */
   public async fetchNovel(userId: string, novelId: string) {
     return await prisma.novel.findUnique({
       where: {
@@ -19,6 +25,9 @@ export class CoAuthorNovelRepository {
     })
   }
 
+  /**
+   * 小説が存在するかどうかを確認します。
+   */
   public async existsNovel(userId: string, novelId: string) {
     return !!(await prisma.novel.findFirst({
       where: {
@@ -51,6 +60,9 @@ export class CoAuthorNovelRepository {
     })
   }
 
+  /**
+   * 小説データを更新します。
+   */
   public async updateNovelData(
     userId: string,
     novelId: string,
