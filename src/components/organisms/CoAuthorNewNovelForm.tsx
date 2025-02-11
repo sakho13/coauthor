@@ -117,11 +117,7 @@ function useCoAuthorNewNovelForm() {
       return
     }
 
-    const result = await postNovel(accessToken, {
-      title,
-      summary,
-      novelType,
-    })
+    const result = await postNovel(accessToken)
 
     setIsLoading(false)
     if (!result.success) {
