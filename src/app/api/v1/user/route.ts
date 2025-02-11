@@ -22,7 +22,6 @@ export async function GET(req: NextRequest) {
       success: true,
       data: {
         user: {
-          id: user.id,
           email: user.email,
           name: user.name,
           createdAt: user.createdAt.toISOString(),

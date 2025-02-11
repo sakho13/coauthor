@@ -33,7 +33,6 @@ export type ApiV1 = {
     Get: {
       Out: {
         user: {
-          id: string
           email: string
           name: string
           createdAt: string
