@@ -26,6 +26,21 @@ export function useApiV1() {
   }
 
   /**
+   * PATCH /api/v1/novel
+   */
+  async function patchNovel(
+    accessToken: string,
+    input: ApiV1["Novel"]["PATCH"]["In"],
+  ) {
+    const result = await fetch("/api/v1/novel", {
+      method: "PATCH",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["Novel"]["PATCH"]["Out"]>(result)
+  }
+
+  /**
    * DELETE /api/v1/novel
    */
   async function deleteNovel(
@@ -73,6 +88,7 @@ export function useApiV1() {
   return {
     postUser,
     postNovel,
+    patchNovel,
     deleteNovel,
     postChapter,
     postChapterContent,
