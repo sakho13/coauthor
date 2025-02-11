@@ -23,11 +23,10 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { firebaseClient } from "@/utils/firebaseClient"
-import { useGetNovels } from "@/utils/hooks/useNovels"
+import { useCreateNovel, useGetNovels } from "@/utils/hooks/useNovels"
 import { useAuthStore } from "@/utils/stores/useAuthStore"
 import { signOut } from "firebase/auth"
 import { Home, Plus, User, LibraryBig, LogOut, ChevronUp } from "lucide-react"
-import Link from "next/link"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
 
@@ -38,6 +37,7 @@ type Props = {
 export default function PrivateLayout({ children }: Props) {
   const { accessToken } = useAuthStore()
   const { dataGetNovels } = useGetNovels()
+  const { createNovel } = useCreateNovel()
 
   const signout = async () => {
     signOut(firebaseClient.auth).then(() => {
@@ -89,10 +89,11 @@ export default function PrivateLayout({ children }: Props) {
 
           <SidebarGroup>
             <SidebarGroupLabel className='select-none'>小説</SidebarGroupLabel>
-            <SidebarGroupAction title='新しい小説を作成する' asChild>
-              <Link href='/novel/new'>
-                <Plus />
-              </Link>
+            <SidebarGroupAction
+              title='新しい小説を作成する'
+              onClick={createNovel}
+            >
+              <Plus />
             </SidebarGroupAction>
 
             <SidebarGroupContent>

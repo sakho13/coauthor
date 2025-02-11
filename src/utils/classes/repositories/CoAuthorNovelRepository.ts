@@ -43,6 +43,12 @@ export class CoAuthorNovelRepository {
     })
   }
 
+  public async countActiveNovels(userId: string) {
+    return await prisma.novel.count({
+      where: { authorId: userId },
+    })
+  }
+
   public async createNovel(
     userId: string,
     title: string,

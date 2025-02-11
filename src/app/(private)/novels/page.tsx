@@ -4,19 +4,19 @@ import { PageTitleParagraph } from "@/components/atoms/PageTitleParagraph"
 import { CoAuthorInformationPop } from "@/components/organisms/CoAuthorInformationPop"
 import { CoAuthorNovelsList } from "@/components/organisms/CoAuthorNovelsList"
 import { Button } from "@/components/ui/button"
+import { useCreateNovel } from "@/utils/hooks/useNovels"
 import { Plus } from "lucide-react"
-import Link from "next/link"
 
 export default function Page() {
+  const { createNovel } = useCreateNovel()
+
   return (
     <div className='w-full px-2'>
       <PageTitleParagraph title='執筆中小説'>
         <div className='flex items-center gap-4'>
-          <Button asChild>
-            <Link href='/novel/new'>
-              <Plus />
-              新規
-            </Link>
+          <Button onClick={createNovel}>
+            <Plus />
+            新規
           </Button>
 
           <CoAuthorInformationPop>

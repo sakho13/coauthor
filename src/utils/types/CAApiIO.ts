@@ -71,12 +71,6 @@ export type ApiV1 = {
 
   Novel: {
     Post: {
-      In: {
-        title: string
-        summary: string
-        novelType: string
-      }
-
       Out: {
         novel: CoAuthor_Novel
       }

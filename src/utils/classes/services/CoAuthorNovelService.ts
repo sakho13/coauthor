@@ -10,6 +10,23 @@ export class CoAuthorNovelService {
     return new CoAuthorNovelService(novelRepository)
   }
 
+  public async createNovelByDefault(userId: string) {
+    const count = await this.novelRepository.countActiveNovels(userId)
+    if (count >= 10) {
+      throw new CoAuthorError({
+        code: "NOVEL_LIMIT",
+        message: "小説登録の上限に達しています。（最大10件）",
+      })
+    }
+
+    return await this.novelRepository.createNovel(
+      userId,
+      `小説タイトル${count}`,
+      "",
+      1,
+    )
+  }
+
   public async updateNovelData(
     userId: string,
     novelId: string,

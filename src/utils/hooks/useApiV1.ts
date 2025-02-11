@@ -16,13 +16,10 @@ export function useApiV1() {
   /**
    * POST /api/v1/novel
    */
-  async function postNovel(
-    accessToken: string,
-    input: ApiV1["Novel"]["Post"]["In"],
-  ) {
+  async function postNovel(accessToken: string) {
     const result = await fetch("/api/v1/novel", {
       method: "POST",
-      body: JSON.stringify(input),
+      body: JSON.stringify({}),
       headers: { Authorization: `Bearer ${accessToken}` },
     })
     return _parseResponse<ApiV1["Novel"]["Post"]["Out"]>(result)

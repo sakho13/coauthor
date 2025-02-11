@@ -1,5 +1,4 @@
 import { CoAuthorApi } from "@/utils/classes/CoAuthorApi"
-import { CoAuthorError } from "@/utils/classes/CoAuthorError"
 import { CoAuthorNovelRepository } from "@/utils/classes/repositories/CoAuthorNovelRepository"
 import { CoAuthorUserRepository } from "@/utils/classes/repositories/CoAuthorUserRepository"
 import { CoAuthorNovelService } from "@/utils/classes/services/CoAuthorNovelService"
@@ -27,35 +26,14 @@ export async function POST(req: NextRequest) {
       api.parseAuthorizationHeader(req),
     )
 
-    const data = await req.json()
+    const userRepo = new CoAuthorUserRepository(prisma)
+    const userService = new CoAuthorUserService(userRepo)
+    const user = await userService.fetchUserByFirebaseUid(token.uid)
 
-    if (
-      !api.parseValidateResult<ApiV1["Novel"]["Post"]["In"]>(
-        data,
-        _validatePost,
-      )
-    )
-      throw new Error("Invalid data")
+    const novelRepo = new CoAuthorNovelRepository()
+    const novelService = new CoAuthorNovelService(novelRepo)
 
-    const registeredNum = await prisma.novel.count({
-      where: { author: { firebaseUid: token.uid } },
-    })
-    if (registeredNum >= 10) {
-      throw new CoAuthorError({
-        code: "NOVEL_LIMIT",
-        message: "小説登録の上限に達しています。（最大10件）",
-      })
-    }
-
-    const result = await prisma.novel.create({
-      data: {
-        title: data.title,
-        summary: data.summary,
-        type: Number(data.novelType),
-        status: 0,
-        author: { connect: { firebaseUid: token.uid } },
-      },
-    })
+    const result = await novelService.createNovelByDefault(user.id)
 
     return {
       success: true,
@@ -153,67 +131,6 @@ export async function DELETE(req: NextRequest) {
   })
 
   return NextResponse.json(result.data, { status: result.status })
-}
-
-function _validatePost(data: unknown): ApiV1ErrorOut | null {
-  const columns: ApiV1ErrorOutColumn[] = []
-
-  if (typeof data !== "object" || data === null)
-    return {
-      code: "INVALID_DATA",
-      message: "入力値が不適切です。",
-      columns: [],
-    }
-
-  if (
-    !("title" in data) ||
-    typeof data.title !== "string" ||
-    data.title.length < 1
-  )
-    return {
-      code: "INVALID_DATA",
-      message: "入力値が不十分です。",
-      columns: [{ name: "title", message: "タイトルは必須です" }],
-    }
-
-  if (!("summary" in data) || typeof data.summary !== "string")
-    return {
-      code: "INVALID_DATA",
-      message: "入力値が不十分です。",
-      columns: [{ name: "summary", message: "内容は必須です" }],
-    }
-
-  if (!("novelType" in data) || typeof data.novelType !== "string")
-    return {
-      code: "INVALID_DATA",
-      message: "入力値が不十分です。",
-      columns: [{ name: "novelType", message: "小説種類は必須です" }],
-    }
-
-  if (data.title.length > 100)
-    columns.push({
-      name: "title",
-      message: "タイトルは100文字以内で入力してください",
-    })
-  if (data.summary.length > 500)
-    columns.push({
-      name: "summary",
-      message: "内容は500文字以内で入力してください",
-    })
-  if (data.novelType !== "0" && data.novelType !== "1")
-    columns.push({
-      name: "novelType",
-      message: "小説種類が不正です",
-    })
-
-  if (columns.length > 0)
-    return {
-      code: "INVALID_DATA",
-      message: "入力値が指定範囲外です。",
-      columns,
-    }
-
-  return null
 }
 
 function _validatePatch(data: unknown): ApiV1ErrorOut | null {
