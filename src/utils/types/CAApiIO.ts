@@ -82,6 +82,20 @@ export type ApiV1 = {
       }
     }
 
+    PATCH: {
+      In: {
+        novelId: string
+      } & Partial<{
+        title: string
+        summary: string
+        novelType: string
+      }>
+
+      Out: {
+        novel: CoAuthor_Novel
+      }
+    }
+
     Delete: {
       In: {
         novelId: string
