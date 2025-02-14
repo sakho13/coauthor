@@ -23,6 +23,8 @@ import { toast } from "sonner"
 import { useAuthStore } from "@/utils/stores/useAuthStore"
 import { joinClassName } from "@/utils/functions/joinClassName"
 import { CoAuthor_NovelChapter_AppendedDate } from "@/utils/types/CABaseTypes"
+import { EditableTextField } from "../molecules/EditableTextField"
+import { useEditNovel } from "@/utils/hooks/useNovels"
 
 type Props = {
   novelId: string
@@ -36,6 +38,8 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
     isLoadingGetNovelChapters,
     newChapterTitle,
     isDialogOpen,
+    onChangeNovelTitle,
+    onSaveNovelTitle,
     onChangeNewChapterTitle,
     createNewChapter,
     toggleDialog,
@@ -58,7 +62,11 @@ export function CoAuthorNovelChapterList({ novelId }: Props) {
         className='mb-4'
       >
         <HeaderParagraph>
-          <h2 className='text-lg'>{novelTitle}</h2>
+          <EditableTextField
+            value={novelTitle}
+            onChange={onChangeNovelTitle}
+            onEditSubmit={onSaveNovelTitle}
+          />
 
           <Dialog
             open={isDialogOpen}
@@ -181,6 +189,7 @@ function useCoAuthorNovelChapterList(novelId: string) {
     isLoadingGetNovelChapters,
     refreshGetNovelChapters,
   } = useGetNovelChapters(novelId)
+  const { editNovel } = useEditNovel()
 
   const { accessToken } = useAuthStore()
   const [newChapterTitle, setNewChapterTitle] = useState("")
@@ -192,6 +201,31 @@ function useCoAuthorNovelChapterList(novelId: string) {
   >([])
 
   const { postChapter } = useApiV1()
+
+  const onChangeNovelTitle = (value: string) => {
+    setTitle(value)
+  }
+
+  const onSaveNovelTitle = async () => {
+    if (title.trim() == "") {
+      toast.warning("タイトルが入力されていません")
+      if (dataGetNovelChapters?.success)
+        setTitle(dataGetNovelChapters.data.novel.title)
+      return
+    }
+
+    if (
+      dataGetNovelChapters?.success &&
+      title === dataGetNovelChapters?.data.novel.title
+    )
+      return
+
+    const result = await editNovel(novelId, "title", title)
+
+    if (result) {
+      await refreshGetNovelChapters()
+    }
+  }
 
   const onChangeNewChapterTitle = (value: string) => {
     setNewChapterTitle(value)
@@ -237,6 +271,8 @@ function useCoAuthorNovelChapterList(novelId: string) {
     isLoadingGetNovelChapters,
     newChapterTitle,
     isDialogOpen,
+    onChangeNovelTitle,
+    onSaveNovelTitle,
     onChangeNewChapterTitle,
     createNewChapter,
     toggleDialog: _toggleDialog,
