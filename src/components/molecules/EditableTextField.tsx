@@ -2,6 +2,7 @@ import { Pen, Save } from "lucide-react"
 import { useState } from "react"
 
 type Props = {
+  className?: string
   value: string
   onChange: (value: string) => void
   onEditSubmit: () => Promise<void>
@@ -13,7 +14,12 @@ type Props = {
  * テキスト末尾のペンアイコンをクリックすると、pタグがテキストフィールドに切り替わり編集が可能になります。
  * 編集が終わると、Enterを押すか、Saveボタンをクリックすることで編集内容が保存されます。
  */
-export function EditableTextField({ value, onChange, onEditSubmit }: Props) {
+export function EditableTextField({
+  className,
+  value,
+  onChange,
+  onEditSubmit,
+}: Props) {
   const [isEditing, setIsEditing] = useState(false)
 
   return (
@@ -33,10 +39,10 @@ export function EditableTextField({ value, onChange, onEditSubmit }: Props) {
             setIsEditing(false)
             onEditSubmit()
           }}
-          className='w-full border'
+          className={`w-full border`}
         />
       ) : (
-        <p>{value}</p>
+        <p className={className}>{value}</p>
       )}
 
       {isEditing ? (
@@ -45,12 +51,12 @@ export function EditableTextField({ value, onChange, onEditSubmit }: Props) {
             setIsEditing(false)
             onEditSubmit()
           }}
-          className='cursor-pointer mx-2'
+          className='cursor-pointer mx-2 hover:text-primary'
         />
       ) : (
         <Pen
           onClick={() => setIsEditing(true)}
-          className='cursor-pointer w-4 mx-2'
+          className='cursor-pointer w-4 mx-2 hover:text-primary'
         />
       )}
     </div>
