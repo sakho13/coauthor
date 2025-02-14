@@ -36,8 +36,16 @@ type Props = {
 
 export default function PrivateLayout({ children }: Props) {
   const { accessToken } = useAuthStore()
-  const { dataGetNovels } = useGetNovels()
-  const { createNovel } = useCreateNovel()
+  const { dataGetNovels, refreshGetNovels } = useGetNovels()
+  const { createNovel: _createNovel } = useCreateNovel()
+
+  const createNovel = async () => {
+    const result = await _createNovel()
+    if (result) {
+      refreshGetNovels()
+      redirect(`/novel/${result.data.novel.id}?new=true`)
+    }
+  }
 
   const signout = async () => {
     signOut(firebaseClient.auth).then(() => {

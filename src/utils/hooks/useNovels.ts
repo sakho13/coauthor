@@ -9,7 +9,7 @@ export function useGetNovels(immutable = false) {
   const { accessToken } = useAuthStore()
 
   const swr = immutable ? useSWRImmutable : useSWR
-  const { data, error, isLoading } = swr(
+  const { data, error, isLoading, mutate } = swr(
     ["/api/v1/novels", accessToken],
     async ([url, accessToken]) =>
       accessToken
@@ -23,6 +23,7 @@ export function useGetNovels(immutable = false) {
 
   return {
     dataGetNovels: data,
+    refreshGetNovels: mutate,
     errorGetNovels: error,
     isLoadingGetNovels: isLoading,
   }
@@ -40,7 +41,7 @@ export function useCreateNovel() {
 
     const result = await postNovel(accessToken)
     if (!result.success) {
-      toast.error(result.error.message)
+      toast.error("システムエラー", { description: result.error.message })
       return
     }
 
@@ -51,4 +52,33 @@ export function useCreateNovel() {
   return {
     createNovel,
   }
+}
+
+export function useEditNovel() {
+  const { accessToken } = useAuthStore()
+  const { patchNovel } = useApiV1()
+
+  const editNovel = async <T extends "title" | "summary" | "novelType">(
+    novelId: string,
+    key: T,
+    value: string,
+  ) => {
+    if (!accessToken) {
+      toast.error("ログインしてください")
+      return
+    }
+
+    const updateData = { [key]: value }
+
+    const result = await patchNovel(accessToken, { novelId, ...updateData })
+    if (!result.success) {
+      toast.error(result.error.message)
+      return
+    }
+
+    toast.success("小説を編集しました")
+    return result
+  }
+
+  return { editNovel }
 }
