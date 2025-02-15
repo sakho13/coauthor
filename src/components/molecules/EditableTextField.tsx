@@ -1,3 +1,4 @@
+import { joinClassName } from "@/utils/functions/joinClassName"
 import { Pen, Save } from "lucide-react"
 import { useState } from "react"
 
@@ -23,7 +24,13 @@ export function EditableTextField({
   const [isEditing, setIsEditing] = useState(false)
 
   return (
-    <div className='flex items-center'>
+    <div
+      className={joinClassName(
+        "flex items-center",
+        "border-r border-b",
+        "pl-2",
+      )}
+    >
       {isEditing ? (
         <input
           type='text'
@@ -39,7 +46,8 @@ export function EditableTextField({
             setIsEditing(false)
             onEditSubmit()
           }}
-          className={`w-full border`}
+          className={`w-full`}
+          autoFocus
         />
       ) : (
         <p className={className}>{value}</p>
