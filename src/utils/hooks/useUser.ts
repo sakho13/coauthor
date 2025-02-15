@@ -5,7 +5,7 @@ import { apiV1GetFetcher } from "../functions/apiV1Fetchers"
 export function useGetUser() {
   const { accessToken } = useAuthStore()
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     ["/api/v1/user", accessToken],
     async ([url, accessToken]) =>
       accessToken
@@ -19,6 +19,7 @@ export function useGetUser() {
 
   return {
     dataGetUser: data,
+    refreshGetUser: mutate,
     errorGetUser: error,
     isLoadingGetUser: isLoading,
   }

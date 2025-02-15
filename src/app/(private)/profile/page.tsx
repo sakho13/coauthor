@@ -1,20 +1,14 @@
-import { joinClassName } from "@/utils/functions/joinClassName"
+import { PageTitleParagraph } from "@/components/atoms/PageTitleParagraph"
+import { CoAuthorProfile } from "@/components/organisms/CoAuthorProfile"
 
 export default function Page() {
   return (
     <div className='w-full px-2'>
-      <div
-        className={joinClassName(
-          "w-full",
-          "flex justify-between items-center",
-          "border-b",
-          "px-16 py-4",
-        )}
-      >
-        <h1 className='font-bold text-xl select-none'>プロフィール</h1>
-      </div>
+      <PageTitleParagraph title='プロフィール'></PageTitleParagraph>
 
-      <div></div>
+      <div className='w-full flex justify-center py-8'>
+        <CoAuthorProfile />
+      </div>
     </div>
   )
 }
