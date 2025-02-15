@@ -30,14 +30,14 @@ export function useApiV1() {
    */
   async function patchNovel(
     accessToken: string,
-    input: ApiV1["Novel"]["PATCH"]["In"],
+    input: ApiV1["Novel"]["Patch"]["In"],
   ) {
     const result = await fetch("/api/v1/novel", {
       method: "PATCH",
       body: JSON.stringify(input),
       headers: { Authorization: `Bearer ${accessToken}` },
     })
-    return _parseResponse<ApiV1["Novel"]["PATCH"]["Out"]>(result)
+    return _parseResponse<ApiV1["Novel"]["Patch"]["Out"]>(result)
   }
 
   /**

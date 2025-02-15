@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const api = new CoAuthorApi<ApiV1["Novel"]["PATCH"]["Out"]>()
+  const api = new CoAuthorApi<ApiV1["Novel"]["Patch"]["Out"]>()
 
   return await api.executeV2(async () => {
     const token = await api.verifyAuthorizationHeader(
@@ -62,7 +62,7 @@ export async function PATCH(req: NextRequest) {
     const data = await req.json()
 
     if (
-      !api.parseValidateResult<ApiV1["Novel"]["PATCH"]["In"]>(
+      !api.parseValidateResult<ApiV1["Novel"]["Patch"]["In"]>(
         data,
         _validatePatch,
       )

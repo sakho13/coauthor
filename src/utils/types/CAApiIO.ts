@@ -75,7 +75,7 @@ export type ApiV1 = {
       }
     }
 
-    PATCH: {
+    Patch: {
       In: {
         novelId: string
       } & Partial<{
