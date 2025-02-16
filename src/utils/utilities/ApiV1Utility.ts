@@ -9,18 +9,6 @@ export class ApiV1Utility {
     return this.parseResponse<ApiV1["User"]["Post"]["Out"]>(result)
   }
 
-  public static async postNovel(
-    accessToken: string,
-    input: ApiV1["Novel"]["Post"]["In"],
-  ) {
-    const result = await fetch("/api/v1/novel", {
-      method: "POST",
-      body: JSON.stringify(input),
-      headers: { Authorization: `Bearer ${accessToken}` },
-    })
-    return this.parseResponse<ApiV1["Novel"]["Post"]["Out"]>(result)
-  }
-
   private static async parseResponse<T>(
     response: Response,
   ): Promise<ApiV1BaseOut<T>> {

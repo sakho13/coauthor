@@ -16,16 +16,29 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table"
-import { useRouter } from "next/navigation"
 import { DateUtility } from "@/utils/utilities/DateUtility"
 import { Novel_Type } from "@/utils/types/CABaseTypes"
+import Link from "next/link"
+import { SquarePen } from "lucide-react"
 
 export function CoAuthorNovelsList() {
   const { dataGetNovels, isLoadingGetNovels } = useGetNovels(true)
-  const router = useRouter()
 
   const table = useReactTable({
     columns: [
+      {
+        header: "編集",
+        cell: ({ row }) => (
+          <div className='px-4'>
+            <Link
+              href={`/novel/${row.original.id}`}
+              className='hover:text-primary'
+            >
+              <SquarePen />
+            </Link>
+          </div>
+        ),
+      },
       {
         accessorKey: "title",
         header: "タイトル",
@@ -41,13 +54,13 @@ export function CoAuthorNovelsList() {
         accessorKey: "updatedAt",
         header: "更新日",
         cell: ({ row }) =>
-          DateUtility.convertToLocalDateTime(row.getValue("updatedAt")),
+          DateUtility.convertJstYYYYMMDDHHMM(row.getValue("updatedAt")),
       },
       {
         accessorKey: "createdAt",
         header: "作成日",
         cell: ({ row }) =>
-          DateUtility.convertToLocalDateTime(row.getValue("createdAt")),
+          DateUtility.convertJstYYYYMMDDHHMM(row.getValue("createdAt")),
       },
     ],
     data: !!dataGetNovels?.success ? dataGetNovels.data.novels : [],
@@ -74,11 +87,11 @@ export function CoAuthorNovelsList() {
   }
 
   return (
-    <div className=''>
+    <div id='co-author-novels-list' className='overflow-x-auto'>
       <Table className='min-w-[600px]'>
         <TableHeader className='select-none'>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className=''>
+            <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <TableHead key={header.id}>
                   {header.isPlaceholder
@@ -96,13 +109,7 @@ export function CoAuthorNovelsList() {
         <TableBody>
           {table.getRowModel().rows.length > 0 ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={`novel-row-${row.id}`}
-                className='cursor-pointer'
-                onClick={() => {
-                  router.push(`/novel/${row.original.id}`)
-                }}
-              >
+              <TableRow key={`novel-row-${row.id}`}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={`novel-cell-${row.id}-${cell.id}`}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

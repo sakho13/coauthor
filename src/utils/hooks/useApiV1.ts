@@ -14,23 +14,100 @@ export function useApiV1() {
   }
 
   /**
+   * PATCH /api/v1/user
+   */
+  async function patchUser(
+    accessToken: string,
+    input: ApiV1["User"]["Patch"]["In"],
+  ) {
+    const result = await fetch("/api/v1/user", {
+      method: "PATCH",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["User"]["Patch"]["Out"]>(result)
+  }
+
+  /**
    * POST /api/v1/novel
    */
-  async function postNovel(
-    accessToken: string,
-    input: ApiV1["Novel"]["Post"]["In"],
-  ) {
+  async function postNovel(accessToken: string) {
     const result = await fetch("/api/v1/novel", {
       method: "POST",
-      body: JSON.stringify(input),
+      body: JSON.stringify({}),
       headers: { Authorization: `Bearer ${accessToken}` },
     })
     return _parseResponse<ApiV1["Novel"]["Post"]["Out"]>(result)
   }
 
+  /**
+   * PATCH /api/v1/novel
+   */
+  async function patchNovel(
+    accessToken: string,
+    input: ApiV1["Novel"]["Patch"]["In"],
+  ) {
+    const result = await fetch("/api/v1/novel", {
+      method: "PATCH",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["Novel"]["Patch"]["Out"]>(result)
+  }
+
+  /**
+   * DELETE /api/v1/novel
+   */
+  async function deleteNovel(
+    accessToken: string,
+    input: ApiV1["Novel"]["Delete"]["In"],
+  ) {
+    const result = await fetch("/api/v1/novel", {
+      method: "DELETE",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["Novel"]["Delete"]["Out"]>(result)
+  }
+
+  /**
+   * POST /api/v1/novel/chapter
+   */
+  async function postChapter(
+    accessToken: string,
+    input: ApiV1["NovelChapter"]["Post"]["In"],
+  ) {
+    const result = await fetch("/api/v1/novel/chapter", {
+      method: "POST",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["NovelChapter"]["Post"]["Out"]>(result)
+  }
+
+  /**
+   * POST /api/v1/novel/chapter/content
+   */
+  async function postChapterContent(
+    accessToken: string,
+    input: ApiV1["NovelChapterContent"]["Post"]["In"],
+  ) {
+    const result = await fetch("/api/v1/novel/chapter/content", {
+      method: "POST",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["NovelChapterContent"]["Post"]["Out"]>(result)
+  }
+
   return {
     postUser,
+    patchUser,
     postNovel,
+    patchNovel,
+    deleteNovel,
+    postChapter,
+    postChapterContent,
   }
 }
 

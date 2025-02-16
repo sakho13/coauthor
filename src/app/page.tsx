@@ -1,3 +1,4 @@
+import { FeaturesCarousel } from "@/components/molecules/FeaturesCarousel"
 import { Button } from "@/components/ui/button"
 import { joinClassName } from "@/utils/functions/joinClassName"
 import Link from "next/link"
@@ -39,8 +40,12 @@ export default function Home() {
         </div>
       </div>
 
-      <div className={joinClassName("", "py-4 px-16")}>
-        <p>機能</p>
+      <div className={joinClassName("py-4 px-16 mx-8")}>
+        <p className='font-bold text-xl select-none'>機能</p>
+
+        <div className='mt-4 mx-16'>
+          <FeaturesCarousel />
+        </div>
       </div>
     </main>
   )

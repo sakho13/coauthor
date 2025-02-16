@@ -117,11 +117,7 @@ function useCoAuthorNewNovelForm() {
       return
     }
 
-    const result = await postNovel(accessToken, {
-      title,
-      summary,
-      novelType,
-    })
+    const result = await postNovel(accessToken)
 
     setIsLoading(false)
     if (!result.success) {
@@ -138,7 +134,7 @@ function useCoAuthorNewNovelForm() {
   }
 
   const onChangeTitle = (value: string) => {
-    setTitle(value.trim())
+    setTitle(value)
 
     if (titleValidate) {
       setTitleValidate(_validateTitle(value))

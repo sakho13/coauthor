@@ -1,5 +1,6 @@
 "use client"
 
+import { FullScreenLoading } from "@/components/atoms/FullScreenLoading"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,19 +23,10 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { firebaseClient } from "@/utils/firebaseClient"
-import { useGetNovels } from "@/utils/hooks/useNovels"
+import { useCreateNovel, useGetNovels } from "@/utils/hooks/useNovels"
 import { useAuthStore } from "@/utils/stores/useAuthStore"
 import { signOut } from "firebase/auth"
-import {
-  Home,
-  Plus,
-  User,
-  LibraryBig,
-  LogOut,
-  ChevronUp,
-  Loader,
-} from "lucide-react"
-import Link from "next/link"
+import { Home, Plus, User, LibraryBig, LogOut, ChevronUp } from "lucide-react"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
 
@@ -44,7 +36,16 @@ type Props = {
 
 export default function PrivateLayout({ children }: Props) {
   const { accessToken } = useAuthStore()
-  const { dataGetNovels } = useGetNovels()
+  const { dataGetNovels, refreshGetNovels } = useGetNovels()
+  const { createNovel: _createNovel } = useCreateNovel()
+
+  const createNovel = async () => {
+    const result = await _createNovel()
+    if (result) {
+      refreshGetNovels()
+      redirect(`/novel/${result.data.novel.id}?new=true`)
+    }
+  }
 
   const signout = async () => {
     signOut(firebaseClient.auth).then(() => {
@@ -54,11 +55,7 @@ export default function PrivateLayout({ children }: Props) {
   }
 
   if (!accessToken) {
-    return (
-      <div className='flex items-center justify-center h-screen'>
-        <Loader className='animate-spin' />
-      </div>
-    )
+    return <FullScreenLoading />
   }
 
   return (
@@ -100,10 +97,11 @@ export default function PrivateLayout({ children }: Props) {
 
           <SidebarGroup>
             <SidebarGroupLabel className='select-none'>小説</SidebarGroupLabel>
-            <SidebarGroupAction title='新しい小説を作成する' asChild>
-              <Link href='/novel/new'>
-                <Plus />
-              </Link>
+            <SidebarGroupAction
+              title='新しい小説を作成する'
+              onClick={createNovel}
+            >
+              <Plus />
             </SidebarGroupAction>
 
             <SidebarGroupContent>

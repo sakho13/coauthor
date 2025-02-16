@@ -5,6 +5,7 @@ import { CoAuthorNovelRepository } from "@/utils/classes/repositories/CoAuthorNo
 import { CoAuthorUserRepository } from "@/utils/classes/repositories/CoAuthorUserRepository"
 import { CoAuthorNovelChapterService } from "@/utils/classes/services/CoAuthorNovelChapterService"
 import { CoAuthorUserService } from "@/utils/classes/services/CoAuthorUserService"
+import { prisma } from "@/utils/prisma"
 import {
   ApiV1,
   ApiV1ErrorOut,
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
     )
       throw new Error("Invalid data")
 
-    const userRepo = new CoAuthorUserRepository()
+    const userRepo = new CoAuthorUserRepository(prisma)
     const userService = new CoAuthorUserService(userRepo)
 
     const user = await userService.fetchUserByFirebaseUid(token.uid)

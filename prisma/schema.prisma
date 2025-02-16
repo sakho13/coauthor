@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -39,37 +33,19 @@ model Novel {
   authorId String    @map("author_id")
   author   User      @relation(fields: [authorId], references: [id])
   chapters Chapter[]
-  // tags        Tag[]     @relation("NovelTags")
 }
 
 model Chapter {
   novelId   String   @map("novel_id")
-  id        Int      @default(autoincrement())
+  id        String   @default(cuid(2))
   title     String
   content   String // 章の本文
-  order     Int      @default(autoincrement()) // 章の順番
+  order     Int // 章の順番
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   novel Novel @relation(fields: [novelId], references: [id])
 
   @@id([novelId, id])
+  @@index([novelId, order], map: "novel_id_order_index")
 }
-
-// model Tag {
-//   id       Int       @id @default(autoincrement())
-//   name     String    @unique
-//   novels   Novel[]   @relation("NovelTags")
-// }
-
-// model Comment {
-//   id        Int       @id @default(autoincrement())
-//   content   String
-//   novelId   Int?
-//   chapterId Int?
-//   novel     Novel?    @relation(fields: [novelId], references: [id])
-//   chapter   Chapter?  @relation(fields: [chapterId], references: [id])
-//   userId    Int
-//   user      User      @relation(fields: [userId], references: [id])
-//   createdAt DateTime  @default(now())
-// }

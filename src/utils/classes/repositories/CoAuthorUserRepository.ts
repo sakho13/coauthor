@@ -1,8 +1,13 @@
-import { prisma } from "@/utils/prisma"
+import { CoAuthorPrismaClient } from "./CoAuthorPrismaClient"
+import { PrismaClient } from "@prisma/client"
 
-export class CoAuthorUserRepository {
+export class CoAuthorUserRepository extends CoAuthorPrismaClient {
+  constructor(prisma: PrismaClient) {
+    super(prisma)
+  }
+
   public async fetchUserByFirebaseUid(firebaseUid: string) {
-    return await prisma.user.findUnique({
+    return await this.prisma.user.findUnique({
       where: {
         firebaseUid,
       },
@@ -14,7 +19,7 @@ export class CoAuthorUserRepository {
     email: string,
     name: string,
   ) {
-    return await prisma.user.create({
+    return await this.prisma.user.create({
       data: {
         email,
         name,
@@ -23,8 +28,30 @@ export class CoAuthorUserRepository {
     })
   }
 
+  public async updateUserById(
+    userId: string,
+    updates: Partial<{ name: string }>,
+  ) {
+    return await this.prisma.user.update({
+      data: {
+        name: updates.name,
+      },
+      where: {
+        id: userId,
+      },
+    })
+  }
+
+  public async existsUserById(userId: string) {
+    return !!(await this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    }))
+  }
+
   public async isDuplicateEmail(email: string): Promise<boolean> {
-    const user = await prisma.user.findFirst({
+    const user = await this.prisma.user.findFirst({
       where: {
         email,
       },
