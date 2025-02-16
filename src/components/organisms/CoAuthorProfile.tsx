@@ -1,11 +1,12 @@
 "use client"
 
-import { useGetUser } from "@/utils/hooks/useUser"
+import { useEditUser, useGetUser } from "@/utils/hooks/useUser"
 import { useEffect, useState } from "react"
 import { EditableTextField } from "../molecules/EditableTextField"
+import { toast } from "sonner"
 
 export function CoAuthorProfile() {
-  const { userInfo, onChangeName, onSaveName } = useCoAuthorProfile()
+  const { userInfo, nameError, onChangeName, onSaveName } = useCoAuthorProfile()
 
   return (
     <div id='coauthor-profile'>
@@ -19,20 +20,42 @@ export function CoAuthorProfile() {
           className='min-w-20'
         />
       </div>
+      {nameError && <div className='text-red-500 text-sm'>{nameError}</div>}
     </div>
   )
 }
 
 function useCoAuthorProfile() {
-  const { dataGetUser } = useGetUser()
+  const { dataGetUser, refreshGetUser } = useGetUser()
+  const { editUser } = useEditUser()
 
   const [name, setName] = useState("")
+  const [nameError, setNameError] = useState<string | null>(null)
 
   const onChangeName = (value: string) => {
-    setName(value)
+    if (value.trim().length > 50) {
+      setNameError("ユーザ名は50文字以内で入力してください")
+      return
+    }
+    setNameError(null)
+    setName(value.trim())
   }
 
-  const onSaveName = async () => {}
+  const onSaveName = async () => {
+    if (name.trim().length > 50) {
+      toast.warning("ユーザ名は50文字以内で入力してください")
+      if (dataGetUser?.success) {
+        setName(dataGetUser.data.user.name)
+      }
+      return
+    }
+
+    const result = await editUser("name", name)
+
+    if (result) {
+      await refreshGetUser()
+    }
+  }
 
   useEffect(() => {
     if (dataGetUser) {
@@ -46,6 +69,7 @@ function useCoAuthorProfile() {
     userInfo: {
       name,
     },
+    nameError,
     onChangeName,
     onSaveName,
   }
