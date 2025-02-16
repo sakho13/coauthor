@@ -45,7 +45,7 @@ export function useEditUser() {
       return
     }
 
-    toast.success("小説を編集しました")
+    toast.success("プロフィールを編集しました")
     return result
   }
 
