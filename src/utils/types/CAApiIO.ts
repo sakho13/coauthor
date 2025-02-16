@@ -41,6 +41,21 @@ export type ApiV1 = {
       }
     }
 
+    Patch: {
+      In: Partial<{
+        name: string
+      }>
+
+      Out: {
+        user: {
+          email: string
+          name: string
+          createdAt: string
+          updatedAt: string
+        }
+      }
+    }
+
     Post: {
       Out: {
         user: {

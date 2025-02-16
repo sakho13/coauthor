@@ -28,6 +28,28 @@ export class CoAuthorUserRepository extends CoAuthorPrismaClient {
     })
   }
 
+  public async updateUserById(
+    userId: string,
+    updates: Partial<{ name: string }>,
+  ) {
+    return await this.prisma.user.update({
+      data: {
+        name: updates.name,
+      },
+      where: {
+        id: userId,
+      },
+    })
+  }
+
+  public async existsUserById(userId: string) {
+    return !!(await this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    }))
+  }
+
   public async isDuplicateEmail(email: string): Promise<boolean> {
     const user = await this.prisma.user.findFirst({
       where: {

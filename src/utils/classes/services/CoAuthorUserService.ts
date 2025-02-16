@@ -65,6 +65,21 @@ export class CoAuthorUserService {
     return user
   }
 
+  public async updateUserData(
+    userId: string,
+    updates: Partial<{ name: string }>,
+  ) {
+    const exists = await this.userRepository.existsUserById(userId)
+    if (!exists) {
+      throw new CoAuthorError({
+        code: "USER_NOT_FOUND",
+        message: "ユーザが見つかりませんでした。",
+      })
+    }
+
+    return await this.userRepository.updateUserById(userId, updates)
+  }
+
   public quitUser() {}
 
   public get userId() {
