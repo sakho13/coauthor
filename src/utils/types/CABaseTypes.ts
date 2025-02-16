@@ -1,6 +1,8 @@
 export type CoAuthor_User = {
-  id: string
   name: string
+  email: string
+  createdAt: string
+  updatedAt: string
 }
 
 export type CoAuthor_Novel = {

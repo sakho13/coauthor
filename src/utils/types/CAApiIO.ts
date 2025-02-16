@@ -3,6 +3,7 @@ import {
   CoAuthor_Novel_AppendedDate,
   CoAuthor_NovelChapter,
   CoAuthor_NovelChapter_AppendedDate,
+  CoAuthor_User,
 } from "./CABaseTypes"
 
 export type ApiV1BaseOut<T> =
@@ -32,12 +33,7 @@ export type ApiV1 = {
   User: {
     Get: {
       Out: {
-        user: {
-          email: string
-          name: string
-          createdAt: string
-          updatedAt: string
-        }
+        user: CoAuthor_User
       }
     }
 
@@ -47,22 +43,13 @@ export type ApiV1 = {
       }>
 
       Out: {
-        user: {
-          email: string
-          name: string
-          createdAt: string
-          updatedAt: string
-        }
+        user: CoAuthor_User
       }
     }
 
     Post: {
       Out: {
-        user: {
-          id: string
-          email: string
-          name: string
-        }
+        user: CoAuthor_User
         status: "EXISTS" | "CREATED"
       }
     }
