@@ -14,6 +14,21 @@ export function useApiV1() {
   }
 
   /**
+   * PATCH /api/v1/user
+   */
+  async function patchUser(
+    accessToken: string,
+    input: ApiV1["User"]["Patch"]["In"],
+  ) {
+    const result = await fetch("/api/v1/user", {
+      method: "PATCH",
+      body: JSON.stringify(input),
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+    return _parseResponse<ApiV1["User"]["Patch"]["Out"]>(result)
+  }
+
+  /**
    * POST /api/v1/novel
    */
   async function postNovel(accessToken: string) {
@@ -87,6 +102,7 @@ export function useApiV1() {
 
   return {
     postUser,
+    patchUser,
     postNovel,
     patchNovel,
     deleteNovel,
