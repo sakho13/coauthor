@@ -19,8 +19,11 @@
 - Firebase ... 認証
 - shadcn/ui ... UI フレームワーク
 - jest
-- GCP ... CI/CD
-  - Cloud Run
-  - Cloud Build
-  - Cloud SQL
+- AWS
 - GitHub Actions
+
+## ブランチ
+
+- `main` ... 本番環境
+- `develop` ... 次回バージョン環境(派生元:`main`, マージ先:`main`)
+- `(fix | feature | refactor)/xxx` ... 修正環境(派生元:`develop`, マージ先:`develop`)
