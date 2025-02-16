@@ -21,19 +21,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  user:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                      email:
-                        type: string
-                      createdAt:
-                        $ref: "#/components/schemas/CreatedAt"
-                      updatedAt:
-                        $ref: "#/components/schemas/UpdatedAt"
+                $ref: "#/components/schemas/CoAuthor_User"
     post:
       summary: ユーザ情報の登録
       description: ユーザ登録のタイミングで実行される。<br>
@@ -49,14 +37,7 @@ paths:
                 type: object
                 properties:
                   user:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
-                      email:
-                        type: string
+                    $ref: "#/components/schemas/CoAuthor_User"
                   status:
                     type: string
                     enum:
@@ -64,8 +45,6 @@ paths:
                       - CREATED
     patch:
       summary: ユーザ情報の更新
-      tags:
-        - InDevelopment
       parameters:
         - $ref: "#/components/parameters/AuthorizationHeader"
       requestBody:
@@ -78,6 +57,7 @@ paths:
                 name:
                   type: string
                   nullable: true
+                  maxLength: 50
       responses:
         "200":
           description: OK<br>
@@ -85,17 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  user:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
-                      email:
-                        type: string
+                $ref: "#/components/schemas/CoAuthor_User"
 
   /v1/user/history:
     get:
@@ -385,6 +355,19 @@ components:
           type: string
         message:
           type: string
+    CoAuthor_User:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+        createdAt:
+          $ref: "#/components/schemas/CreatedAt"
+        updatedAt:
+          $ref: "#/components/schemas/UpdatedAt"
     CoAuthor_Novel:
       type: object
       properties:
