@@ -1,16 +1,15 @@
 // firebaseAdmin.ts
 import * as admin from "firebase-admin"
+import { GlobalStatics } from "./GlobalStatics"
 
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? "",
-      clientEmail: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL ?? "",
-      privateKey:
-        process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY?.replaceAll("\\n", "\n") ??
-        "",
+      projectId: GlobalStatics.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      clientEmail: GlobalStatics.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL,
+      privateKey: GlobalStatics.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY,
     }),
-    databaseURL: process.env.DATABASE_URL,
+    databaseURL: GlobalStatics.DATABASE_URL,
   })
 }
 
