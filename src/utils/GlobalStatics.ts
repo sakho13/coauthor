@@ -12,7 +12,7 @@ type GlobalStaticsType = {
   NEXT_PUBLIC_FIREBASE_PRIVATE_KEY: string
 }
 
-export const GlobalStatics = {
+export const GLOBAL_STATICS = Object.freeze({
   DATABASE_URL: process.env.DATABASE_URL ?? "",
   NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? "",
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:
@@ -30,4 +30,4 @@ export const GlobalStatics = {
     process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL ?? "",
   NEXT_PUBLIC_FIREBASE_PRIVATE_KEY:
     process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY?.replaceAll("\\n", "\n") ?? "",
-} satisfies GlobalStaticsType
+} satisfies GlobalStaticsType)
