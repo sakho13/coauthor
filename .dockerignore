@@ -2,6 +2,7 @@ node_modules
 coverage
 .github
 .vscode
+.next
 
 .git
 .gitignore
