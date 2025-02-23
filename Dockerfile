@@ -6,15 +6,21 @@ FROM base AS deps
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-
 RUN npm ci
 
 
 FROM base AS builder
 
+ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+RUN apt-get update && apt-get upgrade openssl -y \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN npm run prisma:generate
 
 RUN npm run build
 
@@ -23,6 +29,10 @@ FROM node:20.11.0 AS runner
 
 ENV NODE_ENV=production
 WORKDIR /app
+
+RUN apt-get update && apt-get upgrade openssl -y \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs

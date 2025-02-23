@@ -1,0 +1,12 @@
+node_modules
+coverage
+.github
+.vscode
+
+.git
+.gitignore
+coauthor-api*.yml
+compose.yml
+Dockerfile
+
+.env
