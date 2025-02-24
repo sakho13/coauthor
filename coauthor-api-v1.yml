@@ -11,6 +11,8 @@ servers:
 tags:
   - name: InDevelopment
     description: "開発中"
+  - name: Released
+    description: "リリース済み"
 
 paths:
   /v1/user:
@@ -331,6 +333,27 @@ paths:
                           type: integer
                         title:
                           type: string
+
+  /health:
+    get:
+      summary: ヘルスチェック
+      description: ヘルスチェック用のエンドポイント
+      operationId: healthCheck
+      tags:
+        - Released
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - OK
+                      - NG
 
 components:
   schemas:
