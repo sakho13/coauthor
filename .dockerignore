@@ -8,6 +8,7 @@ coverage
 .gitignore
 coauthor-api*.yml
 compose.yml
-Dockerfile
+Dockerfile*
+*.md
 
 .env
