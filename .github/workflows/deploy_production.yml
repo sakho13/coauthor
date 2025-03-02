@@ -46,6 +46,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set Environment Variables
+        env:
+          _DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          _NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          _NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+          _NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          _NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}
+          _NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+          _NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+          _NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          _NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL: ${{ secrets.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL }}
+          _NEXT_PRIVATE_FIREBASE_PRIVATE_KEY: ${{ secrets.NEXT_PRIVATE_FIREBASE_PRIVATE_KEY }}
+        run: |
+          echo "DATABASE_URL=${_DATABASE_URL}" >> .env.production
+          echo "NEXT_PUBLIC_FIREBASE_API_KEY=${_NEXT_PUBLIC_FIREBASE_API_KEY}" >> .env.production
+          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${_NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}" >> .env.production
+          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${_NEXT_PUBLIC_FIREBASE_PROJECT_ID}" >> .env.production
+          echo "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${_NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}" >> .env.production
+          echo "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${_NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}" >> .env.production
+          echo "NEXT_PUBLIC_FIREBASE_APP_ID=${_NEXT_PUBLIC_FIREBASE_APP_ID}" >> .env.production
+          echo "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${_NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID}" >> .env.production
+          echo "NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL=${_NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL}" >> .env.production
+          echo "NEXT_PRIVATE_FIREBASE_PRIVATE_KEY=${_NEXT_PRIVATE_FIREBASE_PRIVATE_KEY}" >> .env.production
+
       - name: Build Docker Image
         run: |
           docker build -t ${{ secrets.AWS_ECR_REPOSITORY }}:${{ github.sha }} .
