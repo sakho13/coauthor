@@ -1,6 +1,4 @@
-type GlobalStaticsType = {
-  DATABASE_URL: string
-
+type GlobalStaticsPublicType = {
   NEXT_PUBLIC_FIREBASE_API_KEY: string
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: string
   NEXT_PUBLIC_FIREBASE_PROJECT_ID: string
@@ -9,11 +7,9 @@ type GlobalStaticsType = {
   NEXT_PUBLIC_FIREBASE_APP_ID: string
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: string
   NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL: string
-  NEXT_PUBLIC_FIREBASE_PRIVATE_KEY: string
 }
 
-export const GLOBAL_STATICS = Object.freeze({
-  DATABASE_URL: process.env.DATABASE_URL ?? "",
+export const GLOBAL_STATICS_PUBLIC = {
   NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? "",
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:
     process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? "",
@@ -28,6 +24,4 @@ export const GLOBAL_STATICS = Object.freeze({
     process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID ?? "",
   NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL:
     process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL ?? "",
-  NEXT_PUBLIC_FIREBASE_PRIVATE_KEY:
-    process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY?.replaceAll("\\n", "\n") ?? "",
-} satisfies GlobalStaticsType)
+} satisfies GlobalStaticsPublicType
