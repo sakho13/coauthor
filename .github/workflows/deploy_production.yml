@@ -116,7 +116,7 @@ jobs:
           task-definition: coauthor-production-task.json
           task-definition-family: coauthor-production-task
           container-name: app
-          image: ${{ steps.build-image.outputs.image }}
+          image: ${{ steps.build-image.outputs.image_id }}
           environment-variables: |
             "DATABASE_URL=${{ secrets.DATABASE_URL }}"
             "NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}"
