@@ -113,7 +113,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: coauthor-production-task.json
+          task-definition: ./deploy-process/coauthor-production-task.json
           task-definition-family: coauthor-production-task
           container-name: app
           image: ${{ steps.build-image.outputs.image_id }}
