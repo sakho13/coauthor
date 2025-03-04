@@ -59,8 +59,8 @@ RUN npm run prisma:generate
 RUN npm run build
 
 # USER nextjs
-EXPOSE 3000
+EXPOSE 80
 ENV HOSTNAME="0.0.0.0"
 
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "run", "start", "-p", "80" ]
 # ********************* サーバー実行レイヤー ********************* #
