@@ -99,7 +99,7 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          npm install @prisma/cli@6.1.0
+          npm ci @prisma/client@6.1.0
           npx prisma migrate deploy
 
       - name: Update ECS Task Definition
