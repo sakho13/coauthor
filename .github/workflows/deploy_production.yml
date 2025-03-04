@@ -78,19 +78,57 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.ACCESS_AWS_ROLE }}
-          aws-region: ${{ vars.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
         id: login-ecr
 
       - name: Build Docker Image
+        id: build-image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
           IMAGE_TAG: latest
         run: |
           docker build -t ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }} -f Dockerfile .
-          docker images
           docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
           echo "image_id=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+
+      - name: Migrate Database
+        run: |
+          npx prisma migrate deploy
+
+      - name: Update ECS Task Definition
+        run: |
+          echo "Updating ECS Task Definition"
+          sed -i "s|\[AWS_REGION\]|${{ secrets.AWS_REGION  }}|g" ./deploy-process/coauthor-production-task.json
+          sed -i "s|\[TASK_ROLE_ARN\]|${{ secrets.TASK_ROLE_ARN  }}|g" ./deploy-process/coauthor-production-task.json
+          sed -i "s|\[TASK_EXECUTION_ROLE_ARN\]|${{ secrets.TASK_EXECUTION_ROLE_ARN  }}|g" ./deploy-process/coauthor-production-task.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: coauthor-production-task.json
+          task-definition-family: coauthor-production-task
+          container-name: app
+          image: ${{ steps.build-image.outputs.image }}
+          environment-variables: |
+            "DATABASE_URL=${{ secrets.DATABASE_URL }}"
+            "NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}"
+            "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}"
+            "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}"
+            "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}"
+            "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}"
+            "NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}"
+            "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}"
+            "NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL=${{ secrets.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL }}"
+            "NEXT_PRIVATE_FIREBASE_PRIVATE_KEY=${{ secrets.NEXT_PRIVATE_FIREBASE_PRIVATE_KEY }}"
+
+      - name: Deploy to Amazon ECS service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: coauthor-production-service
+          cluster: ${{ secrets.AWS_ECS_CLUSTER_NAME }}
