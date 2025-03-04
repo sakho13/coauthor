@@ -1,0 +1,51 @@
+{
+  "family": "coauthor-production-task",
+  "containerDefinitions": [
+    {
+      "name": "app",
+      "image": "[IMAGE_ID]",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "app-port",
+          "containerPort": 3000,
+          "hostPort": 80,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/coauthor-production-task",
+          "mode": "non-blocking",
+          "awslogs-create-group": "true",
+          "max-buffer-size": "25m",
+          "awslogs-region": "[AWS_REGION]",
+          "awslogs-stream-prefix": "ecs"
+        },
+        "secretOptions": []
+      },
+      "systemControls": []
+    }
+  ],
+  "taskRoleArn": "[TASK_ROLE_ARN]",
+  "executionRoleArn": "[TASK_EXECUTION_ROLE_ARN]",
+  "networkMode": "awsvpc",
+  "volumes": [],
+  "placementConstraints": [],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "3072",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "enableFaultInjection": false
+}
