@@ -62,5 +62,5 @@ RUN npm run build
 EXPOSE 80
 ENV HOSTNAME="0.0.0.0"
 
-CMD [ "npm", "run", "start", "-p", "80" ]
+CMD [ "npm", "run", "start" ]
 # ********************* サーバー実行レイヤー ********************* #

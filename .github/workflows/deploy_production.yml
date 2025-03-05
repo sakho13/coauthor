@@ -135,3 +135,4 @@ jobs:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: coauthor-production-service
           cluster: ${{ secrets.AWS_ECS_CLUSTER_NAME }}
+          wait-for-service-stability: true
