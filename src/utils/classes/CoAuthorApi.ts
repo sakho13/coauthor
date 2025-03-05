@@ -34,6 +34,22 @@ export class CoAuthorApi<T> {
         }
       }
 
+      if (error instanceof Error) {
+        console.error("[Error]", error.message)
+        return {
+          status: 400,
+          data: {
+            success: false,
+            error: {
+              code: "UnknownError",
+              message: "サーバーエラーが発生しました。",
+              columns: [],
+            },
+          },
+        }
+      }
+
+      console.error("[UnknownError]", JSON.stringify(error))
       return {
         status: 400,
         data: {
@@ -48,6 +64,13 @@ export class CoAuthorApi<T> {
     }
   }
 
+  /**
+   * `execute()`の改良版
+   * @todo 最終的にこれを`execute()`化する
+   *
+   * @param mainLogic
+   * @returns
+   */
   public async executeV2(
     mainLogic: () => Promise<ApiV1BaseOut<T>> | ApiV1BaseOut<T>,
   ) {
@@ -80,7 +103,8 @@ export class CoAuthorApi<T> {
     if (!authorization || typeof authorization !== "string")
       throw new CoAuthorError({
         code: "AuthFailed",
-        message: "認証に失敗しました。認証情報が不十分です。",
+        message:
+          "認証に失敗しました。認証情報が不十分です。リクエストに異常があります。",
       })
 
     if (!authorization.startsWith("Bearer "))

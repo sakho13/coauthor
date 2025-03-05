@@ -1,0 +1,15 @@
+node_modules
+deploy-process
+coverage
+.github
+.vscode
+.next
+
+.git
+.gitignore
+coauthor-api*.yml
+compose.yml
+Dockerfile*
+*.md
+
+.env

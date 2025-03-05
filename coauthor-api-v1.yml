@@ -2,17 +2,24 @@ openapi: "3.0.3"
 info:
   title: CoAuthor API
   version: "1.0"
+  contact:
+    name: API
+  description: "CoAuthor v1"
 servers:
   - url: http://localhost:3000/api
     description: Local server
 tags:
   - name: InDevelopment
     description: "開発中"
+  - name: Released
+    description: "リリース済み"
 
 paths:
   /v1/user:
     get:
       summary: ユーザ情報の取得
+      description: トークンを元にユーザ情報を取得する
+      operationId: getUser
       parameters:
         - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
@@ -26,6 +33,7 @@ paths:
       summary: ユーザ情報の登録
       description: ユーザ登録のタイミングで実行される。<br>
         登録のタイミングで失敗した場合、ログイン画面から再登録を促す。
+      operationId: registerUser
       parameters:
         - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
@@ -45,6 +53,7 @@ paths:
                       - CREATED
     patch:
       summary: ユーザ情報の更新
+      operationId: editUserInfo
       parameters:
         - $ref: "#/components/parameters/AuthorizationHeader"
       requestBody:
@@ -324,6 +333,27 @@ paths:
                           type: integer
                         title:
                           type: string
+
+  /health:
+    get:
+      summary: ヘルスチェック
+      description: ヘルスチェック用のエンドポイント
+      operationId: healthCheck
+      tags:
+        - Released
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - OK
+                      - NG
 
 components:
   schemas:

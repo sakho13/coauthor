@@ -1,42 +1,66 @@
-FROM node:20.11.0-slim AS base
+FROM node:20.11.0 AS base
 
-
+# ********************* 初期化レイヤー ********************* #
 FROM base AS deps
 
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-
 RUN npm ci
+# ********************* 初期化レイヤー ********************* #
 
 
-FROM base AS builder
+# ********************* ビルドレイヤー ********************* #
+# FROM base AS builder
 
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+# ENV NODE_ENV=production
+# WORKDIR /app
+# COPY --from=deps /app/node_modules ./node_modules
+# COPY . .
 
-RUN npm run build
+# RUN apt-get update && apt-get upgrade openssl -y \
+#   && apt-get clean \
+#   && rm -rf /var/lib/apt/lists/*
+
+# RUN npm run prisma:generate
+# RUN npm run build
+# ********************* ビルドレイヤー ********************* #
 
 
-FROM node:20.11.0 AS runner
+# ********************* サーバー実行レイヤー ********************* #
+FROM base AS runner
 
 ENV NODE_ENV=production
 WORKDIR /app
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN apt-get update && apt-get upgrade openssl -y && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /app/public ./public
+# RUN addgroup --system --gid 1001 nodejs
+# RUN adduser --system --uid 1001 nextjs
 
-RUN mkdir .next
-RUN chown -R nextjs:nodejs .next
+# RUN mkdir .next
+# RUN chown -R nextjs:nodejs .next
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
-USER nextjs
-EXPOSE 3000
+# RUN npm run prisma:generate
+# RUN npm run build
+
+# COPY --from=builder /app/public ./public
+# COPY --from=builder /app/.next/static ./.next/static
+# COPY --from=builder /app/public ./public
+# COPY --from=builder /app/.next/standalone ./
+
+COPY .env.production .env
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run prisma:generate
+RUN npm run build
+
+# USER nextjs
+EXPOSE 80
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD [ "npm", "run", "start" ]
+# ********************* サーバー実行レイヤー ********************* #
